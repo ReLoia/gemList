@@ -6,7 +6,7 @@ import {useRouter} from "vue-router";
 
 const router = useRouter();
 
-import {ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 
 import {useUserStore} from '@/store/user'
 import {useHeaderStore} from '@/store/header'
@@ -17,11 +17,35 @@ const header = useHeaderStore()
 const searchState = ref(false)
 const menuState = ref(false)
 
+const headerEl = ref(null)
+const mainEl = ref(null)
+const footerEl = ref(null)
+
+function calculateMainHeight(setHeaderHeight) {
+//   calculate the main height and put it in CSS
+//   100svh - header height - footer height
+  /** @type {HTMLElement} */
+  const mainElement = mainEl.value
+  if (setHeaderHeight) {
+    mainElement.style.height = `calc(100vh - ${setHeaderHeight}px)`
+  } else {
+    /** @type {HTMLElement} */
+    const headerElement = headerEl.value
+    mainElement.style.height = `calc(100vh - ${headerElement.clientHeight}px)`
+  }
+}
+
+watch(header, (newHeader, _) => {
+  const expanded = newHeader.expanded
+  calculateMainHeight(expanded ? 340 : 80)
+})
+
+onMounted(calculateMainHeight)
 
 </script>
 
 <template>
-  <header :class="{ expanded: header.expanded, menuOpen: menuState }">
+  <header :class="{ expanded: header.expanded, menuOpen: menuState }" ref="headerEl">
     <div class="content">
       <!--      {{  Open-Close burger button   }}-->
       <button class="has-icon" style="scale: 1.7;" @click="menuState = !menuState">
@@ -71,7 +95,7 @@ const menuState = ref(false)
     <router-link to="/community">Community</router-link>
     <router-link to="/friends">Friends</router-link>
   </left-menu>
-  <main>
+  <main ref="mainEl">
     <!--  TEST  -->
     <button @click="header.expanded = !header.expanded">
       Toggle Header Expand
@@ -181,6 +205,7 @@ header {
   }
 
   &.menuOpen {
+    transition: .2s border-radius;
     border-bottom-left-radius: 0;
   }
 
@@ -374,9 +399,7 @@ left-menu {
 }
 
 main {
-  //padding-inline: 40px;
-  //margin-inline: auto;
-  //max-width: 1600px;
+  overflow: hidden;
 }
 
 
