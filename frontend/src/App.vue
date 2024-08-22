@@ -1,33 +1,36 @@
 <script setup>
 import '@jamescoyle/svg-icon'
 import {mdiMenu, mdiClose, mdiMagnify, mdiCog, mdiHeartPlus} from "@mdi/js";
+
 import {useRouter} from "vue-router";
 
 const router = useRouter();
+
 import {ref} from "vue";
 
 import {useUserStore} from '@/store/user'
 import {useHeaderStore} from '@/store/header'
 
+const user = useUserStore()
+const header = useHeaderStore()
+
 const searchState = ref(false)
 const menuState = ref(false)
 
-const user = useUserStore()
-const header = useHeaderStore()
 
 </script>
 
 <template>
   <header :class="{ expanded: header.expanded, menuOpen: menuState }">
     <div class="content">
-      <!--      {{  // Open-Close burger button   }}-->
+      <!--      {{  Open-Close burger button   }}-->
       <button class="has-icon" style="scale: 1.7;" @click="menuState = !menuState">
         <svg-icon v-if="!menuState" type="mdi" :path="mdiMenu"/>
         <svg-icon v-else type="mdi" :path="mdiClose"/>
       </button>
-      <!--      {{//   Center Title   }}-->
+      <!--      {{  Center Title   }}-->
       <router-link to="/" class="title">gemList</router-link>
-      <!--      {{//   Search and Profile buttons   }}-->
+      <!--      {{  Search and Profile buttons   }}-->
       <div>
         <div class="search" :class="{ expanded: searchState }">
           <input type="text" placeholder="Search anything" id="search" ref="search"/>
@@ -48,7 +51,7 @@ const header = useHeaderStore()
           } else {
             router.push('/login')
           }
-        })()">
+        })">
           <img :src="user.avatar || ''" alt="User Avatar"/>
         </button>
         <a tabindex="0" class="has-icon button" style="scale: 1.3; display: inline-block">
@@ -112,7 +115,7 @@ header {
     & > .title {
       font-weight: bold;
       letter-spacing: 4px;
-      margin-right: -100px;
+      margin-right: -56px;
     }
 
     & > div {
@@ -182,7 +185,7 @@ header {
   }
 
   &.expanded {
-    height: 280px;
+    height: 340px;
 
     --backgroundImage: url("https://avatars.githubusercontent.com/u/37927709?v=4");
     overflow: hidden;
@@ -345,7 +348,6 @@ left-menu {
       }
     }
 
-
     &:not(:first-of-type) {
       transition: .2s all;
 
@@ -372,8 +374,9 @@ left-menu {
 }
 
 main {
-  max-width: 1400px;
-  margin-inline: auto;
+  //padding-inline: 40px;
+  //margin-inline: auto;
+  //max-width: 1600px;
 }
 
 
