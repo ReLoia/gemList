@@ -1,19 +1,39 @@
 <script setup lang="ts">
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Card from "./Card.vue";
+import {ref} from "vue";
 
 const props = defineProps<{
   items: any[],
   title: string
 }>()
 
-function scrollCarousel(direction: 'left' | 'right') {
-  const carousel = document.querySelector('.carousel[data-type="reviews"] .container') as HTMLElement
-  const scrollAmount = 200
-  const scrollDirection = direction === 'left' ? -1 : 1
+const carousel = ref(null)
 
-  carousel.scrollBy({
-    left: scrollAmount * scrollDirection,
+const canScrollLeft = ref(false)
+const canScrollRight = ref(true)
+
+let scrollPosition = 0;
+
+function scrollCarousel(direction: 'left' | 'right') {
+  const scrollAmount = 300
+  const scrollDirection = direction === 'left' ? -1 : 1;
+
+  if (direction === 'left') {
+    canScrollRight.value = true
+    if ((carousel.value as HTMLUListElement).scrollLeft - scrollAmount <= 0) {
+      canScrollLeft.value = false
+    }
+  } else {
+    canScrollLeft.value = true
+    if ((carousel.value as HTMLUListElement).scrollLeft + scrollAmount >= (carousel.value as HTMLUListElement).scrollWidth - (carousel.value as HTMLUListElement).clientWidth) {
+      canScrollRight.value = false
+    }
+  }
+
+  scrollPosition = Math.max(0, scrollPosition + scrollAmount * scrollDirection);
+  (carousel.value as HTMLUListElement).scrollTo({
+    left: scrollPosition,
     behavior: 'smooth'
   })
 }
@@ -24,13 +44,13 @@ function scrollCarousel(direction: 'left' | 'right') {
   <section class="carousel" data-type="reviews">
     <span class="carousel-title">{{ title }}</span>
     <div class="container">
-      <button @click="scrollCarousel('left')">
-        <svg-icon type="mdi" :path="mdiChevronLeft" :size="1.5"/>
+      <button @click="scrollCarousel('left')" :class="{ disabled: !canScrollLeft }">
+        <svg-icon type="mdi" :path="mdiChevronLeft"/>
       </button>
-      <ul>
+      <ul v-on:wheel="e => e.preventDefault()" ref="carousel">
         <Card v-for="item in items" :key="item.id" :game="item"/>
       </ul>
-      <button @click="scrollCarousel('right')">
+      <button @click="scrollCarousel('right')" :class="{ disabled: !canScrollRight }">
         <svg-icon type="mdi" :path="mdiChevronRight"/>
       </button>
     </div>
@@ -39,6 +59,8 @@ function scrollCarousel(direction: 'left' | 'right') {
 
 <style scoped>
 .carousel {
+  margin-top: 20px;
+
   & > span {
     font-size: 1.3rem;
     font-weight: bold;
@@ -68,9 +90,15 @@ function scrollCarousel(direction: 'left' | 'right') {
 
       left: var(--horizontal-spacing);
 
+      z-index: 12;
+
       &:last-of-type {
         left: unset;
         right: var(--horizontal-spacing);
+      }
+
+      &.disabled {
+        display: none;
       }
     }
 
@@ -80,17 +108,23 @@ function scrollCarousel(direction: 'left' | 'right') {
 
     & > ul {
       display: flex;
-      align-items: flex-start;
       list-style: none;
       gap: 20px;
 
       overflow-x: scroll;
-      -webkit-scroll-snap-type: x proximity;
-      scroll-snap-type: x proximity;
       scroll-behavior: smooth;
       scrollbar-width: none;
+      -webkit-scroll-snap-type: x proximity;
+      scroll-snap-type: x proximity;
+
+      padding-top: 40px;
+      padding-bottom: 300px;
+
+      margin-top: -20px;
+      margin-bottom: -280px;
+
+      padding-inline: 80px;
     }
   }
 }
-
 </style>

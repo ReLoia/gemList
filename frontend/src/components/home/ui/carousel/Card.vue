@@ -30,12 +30,13 @@ const props = defineProps<{
 
 <style scoped>
 li.card {
-  width: 280px;
+  min-width: 280px;
   height: 140px;
   --outer-radius: 12px;
   --inner-radius: 8px;
 
   border-radius: var(--outer-radius);
+  transition: .4s all;
 
   & > div {
     width: 100%;
@@ -80,35 +81,40 @@ li.card {
 
   &:hover {
     margin: -10px;
-    width: 285 & > div {
-    & > .card-preview {
-      & > img {
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
+    min-width: 300px;
+    height: 150px;
+
+    z-index: 10;
+
+    & > div {
+      & > .card-preview {
+        & > img {
+          border-bottom-left-radius: 0;
+          border-bottom-right-radius: 0;
+        }
       }
-    }
 
-    & > .card-content {
-      display: block;
-      height: unset;
-      position: absolute;
-      opacity: 1;
+      & > .card-content {
+        display: block;
+        height: unset;
+        position: absolute;
+        opacity: 1;
 
-      background: black;
-      padding: 10px;
+        background: black;
+        padding: 10px;
 
-      transition: opacity .6s;
+        transition: opacity .6s;
 
-      border-bottom-left-radius: var(--outer-radius);
-      border-bottom-right-radius: var(--outer-radius);
+        border-bottom-left-radius: var(--outer-radius);
+        border-bottom-right-radius: var(--outer-radius);
 
-      & > p {
-        margin-top: 4px;
+        & > p {
+          margin-top: 4px;
+        }
       }
+
+
     }
-
-
-  }
   }
 }
 </style>
