@@ -15,8 +15,6 @@ const menuState = ref(false)
 const user = useUserStore()
 const header = useHeaderStore()
 
-console.log(user)
-
 </script>
 
 <template>
@@ -58,6 +56,7 @@ console.log(user)
         </a>
       </div>
     </div>
+    <component :is="header.content" v-if="header.expanded" class="header-info"/>
   </header>
   <left-menu :class="{ expanded: menuState }">
     <router-link to="/">gemList</router-link>
@@ -70,6 +69,10 @@ console.log(user)
     <router-link to="/friends">Friends</router-link>
   </left-menu>
   <main>
+    <!--  TEST  -->
+    <button @click="header.expanded = !header.expanded">
+      Toggle Header Expand
+    </button>
     <router-view/>
   </main>
 </template>
@@ -87,6 +90,8 @@ header {
 
   position: relative;
   z-index: 1;
+
+  height: 80px;
 
   transition: .8s all;
 
