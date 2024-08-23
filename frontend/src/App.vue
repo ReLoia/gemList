@@ -83,7 +83,7 @@ onMounted(calculateMainHeight)
         </a>
       </div>
     </div>
-    <component :is="headerStore.content.component" v-if="headerStore.expanded" :v-bind="headerStore.content.props"/>
+    <component :is="headerStore.content.component" v-if="headerStore.expanded" v-bind="headerStore.content.props"/>
   </header>
   <left-menu :class="{ expanded: menuState }">
     <router-link to="/">gemList</router-link>

@@ -2,21 +2,21 @@
 
 import {ref} from "vue";
 import {mdiHeart, mdiStar} from "@mdi/js";
+import {useRouter} from "vue-router";
+import {GameModel} from "@/types/common";
 
-interface Game {
-  id: string
-  title: string
-  image: string
-  description: string
-  likes: number
-  rating: number
-}
+const router = useRouter()
 
-defineProps<{
-  game: Game
+const props = defineProps<{
+  game: GameModel
 }>()
 
 const isHovered = ref(false)
+
+function gotoGamePage(event: MouseEvent) {
+  event.preventDefault();
+  router.push(`/game/${props.game.id}`)
+}
 
 </script>
 
@@ -24,7 +24,8 @@ const isHovered = ref(false)
   <li class="card" @mouseover="isHovered = true" @mouseleave="isHovered = false">
     <div>
       <div class="card-preview">
-        <router-link :to="'/game/' + game.id"/>
+        <!--        <router-link :to="'/game/' + game.id" />-->
+        <a href="" v-on:click="gotoGamePage"/>
         <img :src="game.image" alt="Game Image"/>
       </div>
       <article class="card-content" v-if="isHovered">
