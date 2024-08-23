@@ -29,7 +29,7 @@ const isHovered = ref(false)
       </div>
       <article class="card-content" v-if="isHovered">
         <h3>{{ game.title }}</h3>
-        <!--    TODO: add Infos: likes - rating - add to list button - etc      -->
+        <!--    TODO: add Infos: add to list button - etc      -->
         <p class="metadata">
           <span class="rating">
             <span>{{ game.rating.toFixed(2) }}</span>
@@ -145,8 +145,6 @@ li.card {
           }
         }
       }
-
-
     }
   }
 }

@@ -27,6 +27,9 @@ export const useHeaderStore = defineStore('header', {
         },
         setExpanded(expanded) {
             this.expanded = expanded;
+        },
+        setContent(content) {
+            this.content = content;
         }
     }
 

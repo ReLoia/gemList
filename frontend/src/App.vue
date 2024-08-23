@@ -12,7 +12,7 @@ import {useUserStore} from '@/store/user'
 import {useHeaderStore} from '@/store/header'
 
 const user = useUserStore()
-const header = useHeaderStore()
+const headerStore = useHeaderStore()
 
 const searchState = ref(false)
 const menuState = ref(false)
@@ -35,7 +35,7 @@ function calculateMainHeight(setHeaderHeight) {
   }
 }
 
-watch(header, (newHeader, _) => {
+watch(headerStore, (newHeader, _) => {
   const expanded = newHeader.expanded
   calculateMainHeight(expanded ? 340 : 80)
 })
@@ -45,7 +45,7 @@ onMounted(calculateMainHeight)
 </script>
 
 <template>
-  <header :class="{ expanded: header.expanded, menuOpen: menuState }" ref="headerEl">
+  <header :class="{ expanded: headerStore.expanded, menuOpen: menuState }" ref="headerEl">
     <div class="content">
       <!--      {{  Open-Close burger button   }}-->
       <button class="has-icon" style="scale: 1.7;" @click="menuState = !menuState">
@@ -83,7 +83,7 @@ onMounted(calculateMainHeight)
         </a>
       </div>
     </div>
-    <component :is="header.content" v-if="header.expanded" class="header-info"/>
+    <component :is="headerStore.content" v-if="headerStore.expanded"/>
   </header>
   <left-menu :class="{ expanded: menuState }">
     <router-link to="/">gemList</router-link>
@@ -97,7 +97,7 @@ onMounted(calculateMainHeight)
   </left-menu>
   <main ref="mainEl">
     <!--  TEST  -->
-    <button @click="header.expanded = !header.expanded" style="position: absolute; ">
+    <button @click="headerStore.expanded = !headerStore.expanded" style="position: absolute; ">
       Toggle Header Expand
     </button>
     <router-view/>
@@ -121,7 +121,6 @@ header {
   height: 80px;
 
   transition: .8s all;
-  margin-bottom: 20px;
 
   & > .content {
     height: 80px;
@@ -249,67 +248,6 @@ header {
       background-color: #fff;
       z-index: 1;
     }
-
-    & > div.header-info {
-      padding: 1rem 4rem;
-
-      margin-top: auto;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      align-items: baseline;
-      z-index: 1;
-
-      position: relative;
-      width: 1200px;
-      margin-inline: auto;
-
-      &.game-page {
-        padding-left: 260px;
-      }
-
-      & > h3 {
-        font-size: 1.4rem;
-        font-weight: bold;
-      }
-
-      & > .game-page-buttons {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        margin-top: 10px;
-
-        position: absolute;
-        right: 4rem;
-
-        & > button {
-          &:first-of-type {
-            color: var(--primary);
-            background: #D9D9D9;
-            height: 28px;
-            min-width: 120px;
-
-            border-radius: 10px;
-            padding: 0;
-            padding-inline: 10px;
-
-            font-size: 1.1rem;
-            font-weight: bold;
-          }
-
-          &:last-of-type {
-            color: var(--primary);
-            background: #D9D9D9;
-            width: 32px;
-            height: 32px;
-            line-height: 44px;
-            border-radius: 10px;
-
-            scale: .9;
-          }
-        }
-      }
-    }
   }
 }
 
@@ -401,6 +339,7 @@ left-menu {
 
 main {
   overflow: hidden;
+  padding-top: 20px;
 }
 
 
