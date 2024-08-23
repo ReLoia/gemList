@@ -5,4 +5,5 @@ export interface GameModel {
     description: string
     likes: number
     rating: number
+    externalLink: string
 }

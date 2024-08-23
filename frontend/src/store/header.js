@@ -20,7 +20,8 @@ export const useHeaderStore = defineStore('header', {
             content: {
                 component: () => null,
                 props: {}
-            }
+            },
+            loading: false
         }
     },
 
@@ -36,6 +37,9 @@ export const useHeaderStore = defineStore('header', {
         },
         setContent(content) {
             this.content = content;
+        },
+        setLoading(loading) {
+            this.loading = loading;
         }
     }
 
