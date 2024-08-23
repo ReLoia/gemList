@@ -1,32 +1,44 @@
 <script setup lang="ts">
 
+import {ref} from "vue";
+import {mdiHeart, mdiStar} from "@mdi/js";
+
 interface Game {
   id: string
   title: string
   image: string
   description: string
+  likes: number
+  rating: number
 }
 
 defineProps<{
   game: Game
 }>()
 
+const isHovered = ref(false)
+
 </script>
 
 <template>
-  <li class="card">
+  <li class="card" @mouseover="isHovered = true" @mouseleave="isHovered = false">
     <div>
       <div class="card-preview">
         <router-link :to="'/game/' + game.id"/>
         <img :src="game.image" alt="Game Image"/>
       </div>
-      <article class="card-content">
+      <article class="card-content" v-if="isHovered">
         <h3>{{ game.title }}</h3>
         <!--    TODO: add Infos: likes - rating - add to list button - etc      -->
         <p class="metadata">
+          <span class="rating">
+            <span>{{ game.rating.toFixed(2) }}</span>
+            <svg-icon type="mdi" :path="mdiStar"/>
+          </span>
+
           <span class="likes">
-            <svg-icon type="mdi" :path="mdiHeartOutline"/>
             <span>{{ game.likes }}</span>
+            <svg-icon type="mdi" :path="mdiHeart"/>
           </span>
         </p>
         <p>{{ game.description.length > 100 ? game.description.slice(0, 100) + '...' : game.description }}</p>
@@ -37,8 +49,8 @@ defineProps<{
 
 <style scoped>
 li.card {
-  min-width: 280px;
-  height: 140px;
+  min-width: 300px;
+  height: 150px;
   --outer-radius: 12px;
   --inner-radius: 8px;
 
@@ -82,14 +94,13 @@ li.card {
       opacity: 0;
       height: 0;
       overflow: hidden;
-
     }
   }
 
   &:hover {
+    min-width: 320px;
     margin: -10px;
-    min-width: 300px;
-    height: 150px;
+    height: 160px;
 
     z-index: 10;
 
@@ -115,8 +126,23 @@ li.card {
         border-bottom-left-radius: var(--outer-radius);
         border-bottom-right-radius: var(--outer-radius);
 
-        & > p {
-          margin-top: 4px;
+        & > .metadata {
+          color: #b3b3b3;
+          display: flex;
+
+          gap: 8px;
+          margin-top: 2px;
+          margin-bottom: 12px;
+
+          & > span {
+            display: flex;
+            line-height: 22px;
+            height: 20px;
+
+            & > svg-icon {
+              scale: .65;
+            }
+          }
         }
       }
 

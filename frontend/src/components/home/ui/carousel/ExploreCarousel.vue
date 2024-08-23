@@ -15,7 +15,7 @@ const canScrollRight = ref(true)
 let scrollPosition = 0;
 
 function scrollCarousel(direction: 'left' | 'right') {
-  const scrollAmount = 300
+  const scrollAmount = 320
   const scrollDirection = direction === 'left' ? -1 : 1;
 
   if (direction === 'left') {
@@ -29,7 +29,7 @@ function scrollCarousel(direction: 'left' | 'right') {
     if (!canScrollRight.value) return
 
     canScrollLeft.value = true
-    if ((carousel.value as HTMLUListElement).scrollLeft + scrollAmount >= (carousel.value as HTMLUListElement).scrollWidth - (carousel.value as HTMLUListElement).clientWidth) {
+    if ((carousel.value as HTMLUListElement).scrollLeft + scrollAmount + 300 >= (carousel.value as HTMLUListElement).scrollWidth - (carousel.value as HTMLUListElement).clientWidth) {
       canScrollRight.value = false
     }
   }
@@ -62,7 +62,7 @@ function scrollCarousel(direction: 'left' | 'right') {
 
 <style scoped>
 .carousel {
-  margin-top: 20px;
+  margin-top: 30px;
 
   & > span {
     font-size: 1.3rem;
@@ -82,7 +82,7 @@ function scrollCarousel(direction: 'left' | 'right') {
       position: absolute;
       top: 50%;
       transform: translateY(calc(-50% / 2.4));
-      --horizontal-spacing: 8px;
+      --horizontal-spacing: 18px;
       --horizontal-expand: 10px;
 
       opacity: 0;
@@ -125,8 +125,8 @@ function scrollCarousel(direction: 'left' | 'right') {
       -webkit-scroll-snap-type: x proximity;
       scroll-snap-type: x proximity;
 
-      padding-top: 40px;
-      padding-bottom: 300px;
+      padding-block: 40px 300px;
+      padding-inline: 80px 300px;
 
       margin-top: -20px;
       margin-bottom: -280px;
