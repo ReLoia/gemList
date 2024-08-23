@@ -5,7 +5,6 @@ import {onMounted, onUnmounted, ref, shallowRef} from "vue";
 import {useRoute} from "vue-router";
 import {GameModel} from "@/types/common";
 import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
-import LoadingBar from "../common/LoadingBar.vue";
 
 const gamePageHeader = shallowRef(GamePageHeader)
 const route = useRoute()

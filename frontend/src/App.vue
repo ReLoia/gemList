@@ -1,6 +1,6 @@
 <script setup>
 import '@jamescoyle/svg-icon'
-import {mdiMenu, mdiClose, mdiMagnify, mdiCog, mdiHeartPlus} from "@mdi/js";
+import {mdiMenu, mdiClose, mdiMagnify, mdiCog} from "@mdi/js";
 
 import {useRouter} from "vue-router";
 
@@ -182,8 +182,6 @@ header {
 
             background: none;
 
-
-            border: none;
             outline: none;
           }
 
