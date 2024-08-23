@@ -10,6 +10,7 @@ import {onMounted, ref, watch} from "vue";
 
 import {useUserStore} from '@/store/user'
 import {useHeaderStore} from '@/store/header'
+import LoadingBar from "./components/common/LoadingBar.vue";
 
 const user = useUserStore()
 const headerStore = useHeaderStore()
@@ -45,6 +46,7 @@ onMounted(calculateMainHeight)
 </script>
 
 <template>
+  <LoadingBar v-if="headerStore.loading"/>
   <header :class="{ expanded: headerStore.expanded, menuOpen: menuState }" ref="headerEl">
     <div class="content">
       <!--      {{  Open-Close burger button   }}-->
@@ -340,6 +342,8 @@ left-menu {
 main {
   overflow: hidden;
   padding-top: 20px;
+
+  box-sizing: border-box;
 }
 
 

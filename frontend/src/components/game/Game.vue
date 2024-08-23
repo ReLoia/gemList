@@ -12,7 +12,22 @@ const route = useRoute()
 const header = useHeaderStore()
 
 const gameID = route.params.id;
-const game = ref<GameModel>(null);
+// TODO: reset to null
+const game = ref<GameModel>({
+  id: '',
+  title: 'a',
+  description: 'b',
+  externalLinks: [
+    {
+      url: 'http://localhost:8080',
+      img_url: 'https://via.placeholder.com/150'
+    },
+    {
+      url: 'http://localhost:8080',
+      img_url: 'https://via.placeholder.com/150'
+    }
+  ]
+});
 const error = ref<string | null>(null);
 
 
@@ -23,22 +38,22 @@ onMounted(async () => {
   try {
     const response = await fetch(`/api/game/${gameID}`);
     game.value = await response.json();
-
-    header.setContent({
-      component: gamePageHeader,
-      props: {
-        title: game.value.title,
-        description: game.value.description,
-        // image:
-      }
-    })
   } catch (e) {
     error.value = e.message;
   } finally {
-    // header.setLoading(false);
+    header.setLoading(false);
   }
 
+  header.setContent({
+    component: gamePageHeader,
+    props: {
+      title: game?.value?.title,
+      description: game?.value?.description,
+      // image:
+    }
+  })
 });
+
 
 onUnmounted(() => {
   header.setExpanded(false)
@@ -64,7 +79,7 @@ const metadata = [{
     <section class="content">
       <div class="external-links">
         <!--   list of external links related to the game     -->
-        <ExternalLinkItem v-for="link in game.externalLinks" :key="link.id" :link="link"/>
+        <ExternalLinkItem v-for="link in game.externalLinks" :key="link.id" :url="link.url" :img_url="link.img_url"/>
 
       </div>
 
@@ -85,7 +100,7 @@ const metadata = [{
   display: grid;
   grid-template-columns: 3fr auto;
   grid-template-areas: "content metadata";
-  gap: 10px;
+  gap: 5px;
 
   width: 100%;
   height: 100%;
@@ -97,6 +112,12 @@ const metadata = [{
 
   & > .content {
     grid-area: content;
+
+    & > .external-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
   }
 
   & > .metadata {
