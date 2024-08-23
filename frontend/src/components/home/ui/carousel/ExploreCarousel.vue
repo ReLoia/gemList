@@ -3,11 +3,10 @@ import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Card from "./Card.vue";
 import {ref} from "vue";
 
-const props = defineProps<{
+defineProps<{
   items: any[],
   title: string
-}>()
-
+}>();
 const carousel = ref(null)
 
 const canScrollLeft = ref(false)
@@ -20,11 +19,15 @@ function scrollCarousel(direction: 'left' | 'right') {
   const scrollDirection = direction === 'left' ? -1 : 1;
 
   if (direction === 'left') {
+    if (!canScrollLeft.value) return
+
     canScrollRight.value = true
     if ((carousel.value as HTMLUListElement).scrollLeft - scrollAmount <= 0) {
       canScrollLeft.value = false
     }
   } else {
+    if (!canScrollRight.value) return
+
     canScrollLeft.value = true
     if ((carousel.value as HTMLUListElement).scrollLeft + scrollAmount >= (carousel.value as HTMLUListElement).scrollWidth - (carousel.value as HTMLUListElement).clientWidth) {
       canScrollRight.value = false
@@ -80,6 +83,7 @@ function scrollCarousel(direction: 'left' | 'right') {
       top: 50%;
       transform: translateY(calc(-50% / 2.4));
       --horizontal-spacing: 8px;
+      --horizontal-expand: 10px;
 
       opacity: 0;
       scale: 2.4;
@@ -89,16 +93,20 @@ function scrollCarousel(direction: 'left' | 'right') {
       transition: opacity 0.6s;
 
       left: var(--horizontal-spacing);
+      padding-right: var(--horizontal-expand);
 
       z-index: 12;
 
       &:last-of-type {
         left: unset;
+        padding-right: 0;
         right: var(--horizontal-spacing);
+        padding-left: var(--horizontal-expand);
       }
 
       &.disabled {
-        display: none;
+        opacity: 0;
+        cursor: default;
       }
     }
 
@@ -123,7 +131,6 @@ function scrollCarousel(direction: 'left' | 'right') {
       margin-top: -20px;
       margin-bottom: -280px;
 
-      padding-inline: 80px;
     }
   }
 }

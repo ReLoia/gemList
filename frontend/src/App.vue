@@ -97,7 +97,7 @@ onMounted(calculateMainHeight)
   </left-menu>
   <main ref="mainEl">
     <!--  TEST  -->
-    <button @click="header.expanded = !header.expanded">
+    <button @click="header.expanded = !header.expanded" style="position: absolute; ">
       Toggle Header Expand
     </button>
     <router-view/>
@@ -121,6 +121,7 @@ header {
   height: 80px;
 
   transition: .8s all;
+  margin-bottom: 20px;
 
   & > .content {
     height: 80px;

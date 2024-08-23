@@ -7,7 +7,7 @@ interface Game {
   description: string
 }
 
-const props = defineProps<{
+defineProps<{
   game: Game
 }>()
 
@@ -22,6 +22,13 @@ const props = defineProps<{
       </div>
       <article class="card-content">
         <h3>{{ game.title }}</h3>
+        <!--    TODO: add Infos: likes - rating - add to list button - etc      -->
+        <p class="metadata">
+          <span class="likes">
+            <svg-icon type="mdi" :path="mdiHeartOutline"/>
+            <span>{{ game.likes }}</span>
+          </span>
+        </p>
         <p>{{ game.description.length > 100 ? game.description.slice(0, 100) + '...' : game.description }}</p>
       </article>
     </div>

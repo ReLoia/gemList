@@ -29,6 +29,7 @@
 
   margin-inline: auto;
   margin-block: 20px;
+  margin-bottom: 40px;
 
   & > h3 {
     font-size: 1.7rem;
