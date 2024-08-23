@@ -8,13 +8,19 @@ export const useHeaderStore = defineStore('header', {
          * title: string,
          * description: string,
          * type: string,
-         * content: () => void
+         * content: {
+         *     component: () => JSX.Element,
+         *     props: Record<string, unknown>
+         * }
          }} */
         return {
             expanded: false,
             backgroundImage: '',
             type: '',
-            content: () => null,
+            content: {
+                component: () => null,
+                props: {}
+            }
         }
     },
 
