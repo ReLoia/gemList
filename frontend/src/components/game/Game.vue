@@ -111,6 +111,46 @@ const metadata = [{
         </ul>
       </section>
 
+      <divider></divider>
+
+      <!--   stats is a grid that contains "widgets" - div that are N cols of width and that have rounded corners and dark background   -->
+      <div class="stats">
+        <div class="widget ratings">
+          <ul>
+            <li>
+              <span>1</span>
+            </li>
+            <li>
+              <span>2</span>
+            </li>
+            <li>
+              <span>3</span>
+            </li>
+            <li>
+              <span>4</span>
+            </li>
+            <li>
+              <span>5</span>
+            </li>
+            <li>
+              <span>6</span>
+            </li>
+            <li>
+              <span>7</span>
+            </li>
+            <li>
+              <span>8</span>
+            </li>
+            <li>
+              <span>9</span>
+            </li>
+            <li>
+              <span>10</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
     </div>
     <div class="metadata">
       <!--   TODO: add more metadata about the game   -->
@@ -154,12 +194,57 @@ const metadata = [{
         margin: 0;
         list-style: none;
       }
+
+      &.external-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
     }
 
-    & > .external-links {
-      display: flex;
-      flex-wrap: wrap;
+    & > divider {
+      display: block;
+      height: 1px;
+      margin-block: 30px;
+      width: 90%;
+      margin-inline: auto;
+
+      background: white;
+    }
+
+    & > .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
+
+      & > .widget {
+        border-radius: 6px;
+        background: rgba(60, 60, 60, 0.4);
+        padding: 6px 20px;
+
+        &.ratings {
+          grid-column: span 2;
+
+          & > ul {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+
+            & > li {
+              font-size: .85rem;
+
+              & > span {
+                display: block;
+                width: 26px;
+                text-align: center;
+                background: red;
+
+                border-radius: 4px;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
