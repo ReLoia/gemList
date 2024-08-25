@@ -2,8 +2,6 @@
 
 import {mdiPlusCircle} from '@mdi/js';
 
-import {defineProps} from 'vue';
-
 const props = defineProps({
   title: String,
   description: String,

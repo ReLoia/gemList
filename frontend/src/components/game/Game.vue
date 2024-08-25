@@ -5,6 +5,8 @@ import {onMounted, onUnmounted, ref, shallowRef} from "vue";
 import {useRoute} from "vue-router";
 import {GameModel} from "@/types/common";
 import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
+import Card from "../home/ui/carousel/Card.vue";
+import SmallGameCard from "../common/SmallGameCard.vue";
 
 const gamePageHeader = shallowRef(GamePageHeader)
 const route = useRoute()
@@ -75,14 +77,23 @@ const metadata = [{
 
 <template>
   <div class="page" v-if="game">
-    <section class="content">
-      <div class="external-links">
+    <div class="content">
+      <section class="external-links">
         <!--   list of external links related to the game     -->
         <ExternalLinkItem v-for="link in game.externalLinks" :key="link.id" :url="link.url" :img_url="link.img_url"/>
 
-      </div>
+      </section>
+      <section class="related">
+        <!--   list of related games     -->
+        <h2>Related Games</h2>
+        <ul>
+          <!--          TODO: load related games from backend -->
+          <SmallGameCard id="1" img_url="https://via.placeholder.com/150"/>
+        </ul>
 
-    </section>
+      </section>
+
+    </div>
     <div class="metadata">
       <!--   TODO: add more metadata about the game   -->
       <div class="meta" v-for="item in metadata" :key="item.name">
@@ -106,11 +117,26 @@ const metadata = [{
   max-width: 1400px;
   margin: auto;
 
-  //background: red;
-
+  padding-inline: 15px;
 
   & > .content {
     grid-area: content;
+
+    & > section {
+      & > h2 {
+        margin-left: 20px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+      }
+
+      & > ul {
+        display: flex;
+        gap: 10px;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+      }
+    }
 
     & > .external-links {
       display: flex;
