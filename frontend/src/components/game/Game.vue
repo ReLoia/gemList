@@ -7,6 +7,7 @@ import {GameModel} from "@/types/common";
 import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
 import Card from "../home/ui/carousel/Card.vue";
 import SmallGameCard from "../common/SmallGameCard.vue";
+import StaffCard from "./ui/StaffCard.vue";
 
 const gamePageHeader = shallowRef(GamePageHeader)
 const route = useRoute()
@@ -92,6 +93,23 @@ const metadata = [{
         </ul>
 
       </section>
+      <section>
+        <h2>Staff</h2>
+        <ul>
+          <StaffCard :staff="{
+            id: '1',
+            img_url: 'https://via.placeholder.com/150',
+            name: 'John Doe',
+            role: 'Developer'
+          }"/>
+          <StaffCard :staff="{
+            id: '1',
+            img_url: 'https://via.placeholder.com/150',
+            name: 'John Doe',
+            role: 'Developer'
+          }"/>
+        </ul>
+      </section>
 
     </div>
     <div class="metadata">
@@ -148,7 +166,7 @@ const metadata = [{
   & > .metadata {
     grid-area: metadata;
 
-    width: 220px;
+    width: 200px;
     padding: 8px 12px;
     min-height: 400px;
     height: fit-content;
