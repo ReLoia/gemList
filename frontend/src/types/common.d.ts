@@ -6,4 +6,8 @@ export interface GameModel {
     likes: number
     rating: number
     externalLink: string
+    stats: {
+        likes: number
+        ratings: number[]
+    }
 }

@@ -28,8 +28,15 @@ const game = ref<GameModel>({
       url: 'http://localhost:8080',
       img_url: 'https://via.placeholder.com/150'
     }
-  ]
+  ],
+  stats: {
+    likes: 0,
+    ratings: [
+      1, 1, 14, 61, 1, 1, 1, 1, 1, 150
+    ]
+  }
 });
+const totalRatings = game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0);
 const error = ref<string | null>(null);
 
 
@@ -63,16 +70,16 @@ onUnmounted(() => {
 })
 
 // TODO: remove metadata template:
-const metadata = [{
-  name: 'Rating',
-  value: '4.5'
-}, {
-  name: 'Likes',
-  value: '100'
-}, {
-  name: 'Downloads',
-  value: '1000'
-}]
+// const metadata = [{
+//   name: 'Rating',
+//   value: '4.5'
+// }, {
+//   name: 'Likes',
+//   value: '100'
+// }, {
+//   name: 'Downloads',
+//   value: '1000'
+// }]
 
 </script>
 
@@ -117,35 +124,11 @@ const metadata = [{
       <div class="stats">
         <div class="widget ratings">
           <ul>
-            <li>
-              <span>1</span>
-            </li>
-            <li>
-              <span>2</span>
-            </li>
-            <li>
-              <span>3</span>
-            </li>
-            <li>
-              <span>4</span>
-            </li>
-            <li>
-              <span>5</span>
-            </li>
-            <li>
-              <span>6</span>
-            </li>
-            <li>
-              <span>7</span>
-            </li>
-            <li>
-              <span>8</span>
-            </li>
-            <li>
-              <span>9</span>
-            </li>
-            <li>
-              <span>10</span>
+            <li v-for="number in Array.from({length: 10}, (_, i) => i + 1)"
+                :style="{ '--percentage': `${game.stats.ratings[number-1] / totalRatings * 100}%` }">
+              <span>{{ number }}</span> <span>{{
+                (game.stats.ratings[number - 1] / totalRatings * 100).toFixed(2)
+              }}%</span>
             </li>
           </ul>
         </div>
@@ -153,8 +136,12 @@ const metadata = [{
 
     </div>
     <div class="metadata">
+      <div class="meta">
+        <span class="name">Rating</span>
+        <!--        TODO: -->
+      </div>
       <!--   TODO: add more metadata about the game   -->
-      <div class="meta" v-for="item in metadata" :key="item.name">
+      <div class="meta" v-for="item in game.stats" :key="item.name">
         <span class="name">{{ item.name }}</span>
         <span class="value">{{ item.value }}</span>
       </div>
@@ -214,13 +201,13 @@ const metadata = [{
 
     & > .stats {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 10px;
 
       & > .widget {
         border-radius: 6px;
         background: rgba(60, 60, 60, 0.4);
-        padding: 6px 20px;
+        padding: 6px 10px;
 
         &.ratings {
           grid-column: span 2;
@@ -231,15 +218,45 @@ const metadata = [{
             list-style: none;
 
             & > li {
-              font-size: .85rem;
+              display: flex;
 
-              & > span {
+              font-size: .85rem;
+              position: relative;
+
+              --percentage: 50%;
+
+              &:not(:last-child) {
+                margin-bottom: 4px;
+              }
+
+              & > span:first-of-type {
+                font-size: .7rem;
                 display: block;
                 width: 26px;
                 text-align: center;
-                background: red;
+                font-weight: bold;
+                background: black;
 
-                border-radius: 4px;
+                border-radius: 4px 0 0 4px;
+
+                &:after {
+                  content: '';
+                  position: absolute;
+                  top: 0;
+                  left: 26px;
+
+                  display: block;
+                  width: calc(var(--percentage) - 26px);
+                  height: 100%;
+                  background: rgba(0, 124, 0, 0.2);
+
+                  border-radius: 0 4px 4px 0;
+                }
+              }
+
+              & > span:nth-child(2) {
+                margin-left: 10px;
+                color: rgba(255, 255, 255, 0.7);
               }
             }
           }
