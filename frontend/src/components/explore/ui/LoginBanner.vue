@@ -23,6 +23,7 @@
   text-align: center;
 
   width: fit-content;
+  max-width: 98%;
   padding: 16px 12px;
   border-radius: 12px;
   background: rgba(217, 217, 217, 0.12);
@@ -39,7 +40,7 @@
 
   & > p {
     font-size: 1rem;
-    margin-bottom: 16px;
+    margin-bottom: 6px;
   }
 
   & > div {

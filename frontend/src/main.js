@@ -1,5 +1,6 @@
 import {createApp} from 'vue'
-import {createPinia} from 'pinia'
+import {createPinia, storeToRefs} from 'pinia'
+import {useUserStore} from "./store/user.js";
 
 import './style.css'
 import App from './App.vue'
@@ -11,13 +12,13 @@ String.prototype.capitalize = function () {
 
 const routes = [
     {path: '/', component: () => import('./components/home/Home.vue')},
+    {path: '/explore', component: () => import('./components/explore/Explore.vue')},
     {path: '/game/:id', component: () => import('./components/game/Game.vue')},
 
     //     TODO: change the path to the correct components
     {path: '/staff/:id', component: () => import('./components/404/NotFound.vue')},
     {path: '/achievement/:id', component: () => import('./components/404/NotFound.vue')},
 
-    {path: '/explore', component: () => import('./components/404/NotFound.vue')},
     {path: '/calendar', component: () => import('./components/404/NotFound.vue')},
     {path: '/library', component: () => import('./components/404/NotFound.vue')},
     {path: '/community', component: () => import('./components/404/NotFound.vue')},
@@ -33,7 +34,7 @@ const routes = [
         route.name = route.path.split('/')[1]
     }
     return route
-})
+});
 
 const router = createRouter({
     history: createWebHistory(),
@@ -41,10 +42,23 @@ const router = createRouter({
 });
 
 const pinia = createPinia()
+const app = createApp(App)
+    .use(pinia);
+const userStore = useUserStore()
+const {username} = storeToRefs(userStore)
 
-createApp(App)
+router.beforeEach((to, from, next) => {
+    const userIsLogged = username.value !== '';
+    if (to.path === '/' && !userIsLogged) {
+        next('/explore')
+    } else {
+        next()
+    }
+});
+
+
+app
     .use(router)
-    .use(pinia)
     .mount("#app");
 
 history.scrollRestoration = 'manual';
