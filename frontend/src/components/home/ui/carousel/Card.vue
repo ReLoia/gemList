@@ -2,18 +2,10 @@
 
 import {ref} from "vue";
 import {mdiHeart, mdiStar} from "@mdi/js";
-
-interface Game {
-  id: string
-  title: string
-  image: string
-  description: string
-  likes: number
-  rating: number
-}
+import {GameModel} from "@/types/common";
 
 defineProps<{
-  game: Game
+  game: GameModel
 }>()
 
 const isHovered = ref(false)
@@ -24,12 +16,12 @@ const isHovered = ref(false)
   <li class="card" @mouseover="isHovered = true" @mouseleave="isHovered = false">
     <div>
       <div class="card-preview">
-        <router-link :to="'/game/' + game.id"/>
+        <router-link :to="{ name: 'game', params: { id: game.id } }"/>
         <img :src="game.image" alt="Game Image"/>
       </div>
       <article class="card-content" v-if="isHovered">
         <h3>{{ game.title }}</h3>
-        <!--    TODO: add Infos: likes - rating - add to list button - etc      -->
+        <!--    TODO: add Infos: add to list button - etc      -->
         <p class="metadata">
           <span class="rating">
             <span>{{ game.rating.toFixed(2) }}</span>
@@ -85,8 +77,6 @@ li.card {
         border-radius: var(--outer-radius);
 
         transition: .6s border-radius;
-
-        background: red;
       }
     }
 
@@ -145,8 +135,6 @@ li.card {
           }
         }
       }
-
-
     }
   }
 }

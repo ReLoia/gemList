@@ -94,14 +94,20 @@ function scrollCarousel(direction: 'left' | 'right') {
 
       left: var(--horizontal-spacing);
       padding-right: var(--horizontal-expand);
+      border-top-right-radius: 20px;
+      border-bottom-right-radius: 20px;
 
       z-index: 12;
+
+      background: rgba(0, 0, 0, 0.06);
+      backdrop-filter: blur(4px);
 
       &:last-of-type {
         left: unset;
         padding-right: 0;
         right: var(--horizontal-spacing);
         padding-left: var(--horizontal-expand);
+        border-radius: 20px 0 0 20px;
       }
 
       &.disabled {

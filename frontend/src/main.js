@@ -5,11 +5,18 @@ import './style.css'
 import App from './App.vue'
 import {createRouter, createWebHistory} from 'vue-router'
 
+String.prototype.capitalize = function () {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 const routes = [
     {path: '/', component: () => import('./components/home/Home.vue')},
     {path: '/game/:id', component: () => import('./components/game/Game.vue')},
 
     //     TODO: change the path to the correct components
+    {path: '/staff/:id', component: () => import('./components/404/NotFound.vue')},
+    {path: '/achievement/:id', component: () => import('./components/404/NotFound.vue')},
+
     {path: '/explore', component: () => import('./components/404/NotFound.vue')},
     {path: '/calendar', component: () => import('./components/404/NotFound.vue')},
     {path: '/library', component: () => import('./components/404/NotFound.vue')},
@@ -21,7 +28,12 @@ const routes = [
     {path: '/profile', component: () => import('./components/404/NotFound.vue')},
 
     {path: '/:pathMatch(.*)*', component: () => import('./components/404/NotFound.vue')},
-]
+].map(route => {
+    if (route.name === undefined) {
+        route.name = route.path.split('/')[1]
+    }
+    return route
+})
 
 const router = createRouter({
     history: createWebHistory(),
