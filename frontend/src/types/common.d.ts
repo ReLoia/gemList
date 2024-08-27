@@ -3,11 +3,13 @@ export interface GameModel {
     title: string
     image: string
     description: string
-    likes: number
-    rating: number
-    externalLink: string
+    externalLinks: {
+        url: string
+        img_url: string
+    }[]
     stats: {
         likes: number
         ratings: number[]
-    }
+    },
+    meta: any
 }

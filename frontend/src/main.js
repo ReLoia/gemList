@@ -5,7 +5,10 @@ import './style.css'
 import App from './App.vue'
 import {createRouter, createWebHistory} from 'vue-router'
 
-/** @type {RouteRecordRaw[]} */
+String.prototype.capitalize = function () {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
 const routes = [
     {path: '/', component: () => import('./components/home/Home.vue')},
     {path: '/game/:id', component: () => import('./components/game/Game.vue')},

@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import GamePageHeader from "./ui/GamePageHeader.vue";
-import {useHeaderStore} from '@/store/header.js';
+import {useHeaderStore} from "../../store/header";
 import {onMounted, onUnmounted, ref, shallowRef} from "vue";
 import {useRoute} from "vue-router";
-import {GameModel} from "@/types/common";
+import {GameModel} from "../../types/common";
 import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
-import Card from "../explore/ui/carousel/Card.vue";
 import SmallGameCard from "../common/SmallGameCard.vue";
 import StaffCard from "./ui/StaffCard.vue";
 import AchievementItem from "./ui/AchievementItem.vue";
@@ -17,6 +16,7 @@ const header = useHeaderStore()
 const gameID = route.params.id;
 // TODO: reset to null
 const game = ref<GameModel>({
+  image: "",
   id: '',
   title: 'a',
   description: 'b',
@@ -35,6 +35,14 @@ const game = ref<GameModel>({
     ratings: [
       1, 1, 14, 61, 1, 1, 1, 1, 1, 150
     ]
+  },
+  meta: {
+    platforms: 'Windows, Linux, Mac',
+    releaseYear: '2021',
+    genres: 'Action, Adventure',
+    developer: 'Ubisoft',
+    publisher: 'Ubisoft',
+    likes: 0,
   }
 });
 const totalRatings = game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0);
@@ -90,7 +98,7 @@ onUnmounted(() => {
       <section class="external-links">
         <!--   list of external links related to the game     -->
         <!--  wikipedia, epic games, gog, ubisoft, steam      -->
-        <ExternalLinkItem v-for="link in game.externalLinks" :key="link.id" :url="link.url" :img_url="link.img_url"/>
+        <ExternalLinkItem v-for="link in game.externalLinks" :key="link.url" :url="link.url" :img_url="link.img_url"/>
 
       </section>
       <section class="related">
@@ -174,9 +182,9 @@ onUnmounted(() => {
         <span class="value">Action, Adventure</span>
       </div>
       <!--   TODO: add more metadata about the game   -->
-      <div class="meta" v-for="item in game.stats" :key="item.name">
-        <span class="name">{{ item.name }}</span>
-        <span class="value">{{ item.value }}</span>
+      <div class="meta" v-for="item in Object.entries(game.meta)" :key="item[0]">
+        <span class="name">{{ item[0].capitalize() }}</span>
+        <span class="value">{{ item[1] }}</span>
       </div>
 
     </div>
