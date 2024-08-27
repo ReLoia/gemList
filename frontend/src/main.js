@@ -12,6 +12,7 @@ const routes = [
 
     //     TODO: change the path to the correct components
     {path: '/staff/:id', component: () => import('./components/404/NotFound.vue')},
+    {path: '/achievement/:id', component: () => import('./components/404/NotFound.vue')},
 
     {path: '/explore', component: () => import('./components/404/NotFound.vue')},
     {path: '/calendar', component: () => import('./components/404/NotFound.vue')},

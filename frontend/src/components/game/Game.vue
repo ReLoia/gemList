@@ -5,9 +5,10 @@ import {onMounted, onUnmounted, ref, shallowRef} from "vue";
 import {useRoute} from "vue-router";
 import {GameModel} from "@/types/common";
 import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
-import Card from "../home/ui/carousel/Card.vue";
+import Card from "../explore/ui/carousel/Card.vue";
 import SmallGameCard from "../common/SmallGameCard.vue";
 import StaffCard from "./ui/StaffCard.vue";
+import AchievementItem from "./ui/AchievementItem.vue";
 
 const gamePageHeader = shallowRef(GamePageHeader)
 const route = useRoute()
@@ -27,7 +28,7 @@ const game = ref<GameModel>({
     {
       url: 'http://localhost:8080',
       img_url: 'https://via.placeholder.com/150'
-    }
+    },
   ],
   stats: {
     likes: 0,
@@ -121,7 +122,9 @@ onUnmounted(() => {
       <section>
         <h2>Achievements</h2>
         <ul>
-
+          <AchievementItem id="1" title="Mamt" description="Sort"/>
+          <AchievementItem id="1" title="Mamt" description="Sort"/>
+          <AchievementItem id="1" title="Mamt" description="Sort"/>
         </ul>
       </section>
 
@@ -210,6 +213,7 @@ onUnmounted(() => {
         padding: 0;
         margin: 0;
         list-style: none;
+        flex-wrap: wrap;
       }
 
       &.external-links {

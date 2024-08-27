@@ -8,8 +8,8 @@ const router = useRouter();
 
 import {onMounted, ref, watch} from "vue";
 
-import {useUserStore} from '@/store/user'
-import {useHeaderStore} from '@/store/header'
+import {useUserStore} from "./store/user.js";
+import {useHeaderStore} from "./store/header.js";
 import LoadingBar from "./components/common/LoadingBar.vue";
 
 const user = useUserStore()
@@ -98,10 +98,9 @@ onMounted(calculateMainHeight)
     <router-link to="/friends">Friends</router-link>
   </left-menu>
   <main ref="mainEl">
-    <!--  TEST  -->
-    <button @click="headerStore.expanded = !headerStore.expanded" style="position: absolute; ">
-      Toggle Header Expand
-    </button>
+    <!--    TEST -->
+    <!--    set username to "mimmo" -->
+    <button @click="user.setUser({username: 'mimmo'})">Set User</button>
     <router-view/>
   </main>
 </template>
