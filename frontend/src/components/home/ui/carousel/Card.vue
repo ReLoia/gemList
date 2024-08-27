@@ -16,7 +16,7 @@ const isHovered = ref(false)
   <li class="card" @mouseover="isHovered = true" @mouseleave="isHovered = false">
     <div>
       <div class="card-preview">
-        <router-link :to="'/game/' + game.id"/>
+        <router-link :to="{ name: 'game', params: { id: game.id } }"/>
         <img :src="game.image" alt="Game Image"/>
       </div>
       <article class="card-content" v-if="isHovered">

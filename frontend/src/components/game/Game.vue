@@ -88,6 +88,7 @@ onUnmounted(() => {
     <div class="content">
       <section class="external-links">
         <!--   list of external links related to the game     -->
+        <!--  wikipedia, epic games, gog, ubisoft, steam      -->
         <ExternalLinkItem v-for="link in game.externalLinks" :key="link.id" :url="link.url" :img_url="link.img_url"/>
 
       </section>
@@ -117,6 +118,12 @@ onUnmounted(() => {
           }"/>
         </ul>
       </section>
+      <section>
+        <h2>Achievements</h2>
+        <ul>
+
+        </ul>
+      </section>
 
       <divider></divider>
 
@@ -127,7 +134,7 @@ onUnmounted(() => {
             <li v-for="number in Array.from({length: 10}, (_, i) => i + 1)"
                 :style="{ '--percentage': `${game.stats.ratings[number-1] / totalRatings * 100}%` }">
               <span>{{ number }}</span> <span>{{
-                (game.stats.ratings[number - 1] / totalRatings * 100).toFixed(2)
+                Math.round(game.stats.ratings[number - 1] / totalRatings * 100)
               }}%</span>
             </li>
           </ul>
@@ -136,9 +143,32 @@ onUnmounted(() => {
 
     </div>
     <div class="metadata">
+      <!--   platforms, release year, genres, publisher, developer   -->
       <div class="meta">
-        <span class="name">Rating</span>
-        <!--        TODO: -->
+        <span class="name">Developer</span>
+        <span class="value">Ubisoft</span>
+      </div>
+      <div class="meta">
+        <span class="name">Publisher</span>
+        <span class="value">Ubisoft</span>
+      </div>
+      <div class="meta">
+        <span class="name">Release Year</span>
+        <span class="value">2021</span>
+      </div>
+      <div class="meta">
+        <span class="name">Platforms</span>
+        <span class="value">Windows, Linux, Mac</span>
+      </div>
+      <div class="meta">
+        <span class="name">Average Rating</span>
+        <span class="value">{{
+            (game.stats.ratings.reduce((acc, curr, i) => acc + curr * (i + 1), 0) / totalRatings).toFixed(2)
+          }}</span>
+      </div>
+      <div class="meta">
+        <span class="name">Genres</span>
+        <span class="value">Action, Adventure</span>
       </div>
       <!--   TODO: add more metadata about the game   -->
       <div class="meta" v-for="item in game.stats" :key="item.name">
@@ -223,7 +253,7 @@ onUnmounted(() => {
               font-size: .85rem;
               position: relative;
 
-              --percentage: 50%;
+              --percentage: 0%;
 
               &:not(:last-child) {
                 margin-bottom: 4px;

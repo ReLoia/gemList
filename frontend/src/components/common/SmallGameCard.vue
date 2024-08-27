@@ -8,7 +8,7 @@ defineProps<{
 <template>
   <li class="card">
     <div class="card-preview">
-      <RouterLink :to="'/game/' + id"/>
+      <RouterLink :to="{name: 'game', params: {id: id}}"/>
       <img :src="img_url" alt="Game Image"/>
     </div>
   </li>
@@ -24,7 +24,7 @@ defineProps<{
   border-radius: var(--outer-radius);
   transition: .4s all;
 
-  .card-preview {
+  & > .card-preview {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,7 +36,14 @@ defineProps<{
     cursor: pointer;
     transition: .4s all;
 
-    img {
+    & > a {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      display: block;
+    }
+
+    & > img {
       width: 100%;
       height: 100%;
       object-fit: cover;

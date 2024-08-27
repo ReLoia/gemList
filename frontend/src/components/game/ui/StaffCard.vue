@@ -18,7 +18,7 @@ const isHovered = ref(false)
 <template>
   <li class="card" @mouseover="isHovered = true" @mouseleave="isHovered = false">
     <div class="card-preview">
-      <RouterLink :to="'/author/' + staff.id"/>
+      <RouterLink :to="{name: 'staff', params: {id: staff.id}}"/>
       <img :src="staff.img_url" alt="Author Image"/>
     </div>
     <div class="card-content">
@@ -42,7 +42,7 @@ const isHovered = ref(false)
 
   position: relative;
 
-  .card-preview {
+  & > .card-preview {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,7 +54,14 @@ const isHovered = ref(false)
     cursor: pointer;
     transition: .4s all;
 
-    img {
+    & > a {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      display: block;
+    }
+
+    & > img {
       width: 100%;
       height: 100%;
       object-fit: cover;
