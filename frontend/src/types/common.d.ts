@@ -1,4 +1,4 @@
-export interface GameModel {
+export export interface GameModel {
     id: string
     title: string
     image: string
@@ -21,3 +21,17 @@ export interface GameModel {
         publisher: string
     } | any
 }
+
+export type UserModel = {
+    id: string;
+    username: string;
+    email: string;
+    games_rated: Record<string, number>;
+    games_liked: string[];
+    games_played: string[];
+};
+
+export type AuthResponse = {
+    access_token: string;
+    token_type: string;
+};
