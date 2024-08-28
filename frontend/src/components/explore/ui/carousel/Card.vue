@@ -4,12 +4,12 @@ import {ref} from "vue";
 import {mdiHeart, mdiStar} from "@mdi/js";
 import {GameModel} from "../../../../types/common";
 
-defineProps<{
+const props = defineProps<{
   game: GameModel
 }>()
 
 const isHovered = ref(false)
-
+const totalRatings = props.game.stats.ratings.reduce((acc, curr) => acc + curr, 0);
 </script>
 
 <template>
@@ -24,12 +24,14 @@ const isHovered = ref(false)
         <!--    TODO: add Infos: add to list button - etc      -->
         <p class="metadata">
           <span class="rating">
-            <span>{{ game.rating.toFixed(2) }}</span>
+            <span>{{
+                (game.stats.ratings.reduce((acc, curr, i) => acc + curr * (i + 1), 0) / totalRatings).toFixed(2)
+              }}</span>
             <svg-icon type="mdi" :path="mdiStar"/>
           </span>
 
           <span class="likes">
-            <span>{{ game.likes }}</span>
+            <span>{{ game.stats.likes }}</span>
             <svg-icon type="mdi" :path="mdiHeart"/>
           </span>
         </p>
@@ -84,6 +86,9 @@ li.card {
       opacity: 0;
       height: 0;
       overflow: hidden;
+
+      width: 100%;
+      box-sizing: border-box;
     }
   }
 

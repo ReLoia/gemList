@@ -20,12 +20,12 @@ async def root():
          response_description="List of games",
          response_model=list[GameModel])
 async def get_games(
-        search_filter: str = "recent",
+        sort: str = "recent",
         db: motor.motor_asyncio.AsyncIOMotorDatabase = Depends(get_db)
 ):
     games_collection = db.get_collection("games")
 
-    match search_filter:
+    match sort:
         case "recent":
             games = await games_collection.find().sort([("meta.releaseYear", -1)]).to_list(40)
         case "popular":
@@ -35,8 +35,6 @@ async def get_games(
 
     for game in games:
         game["id"] = str(game.pop("_id"))
-
-    print(games)
 
     return games
 

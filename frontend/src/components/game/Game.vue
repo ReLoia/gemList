@@ -42,7 +42,6 @@ const game = ref<GameModel>({
     genres: 'Action, Adventure',
     developer: 'Ubisoft',
     publisher: 'Ubisoft',
-    likes: 0,
   }
 });
 const totalRatings = game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0);
@@ -156,30 +155,10 @@ onUnmounted(() => {
     <div class="metadata">
       <!--   platforms, release year, genres, publisher, developer   -->
       <div class="meta">
-        <span class="name">Developer</span>
-        <span class="value">Ubisoft</span>
-      </div>
-      <div class="meta">
-        <span class="name">Publisher</span>
-        <span class="value">Ubisoft</span>
-      </div>
-      <div class="meta">
-        <span class="name">Release Year</span>
-        <span class="value">2021</span>
-      </div>
-      <div class="meta">
-        <span class="name">Platforms</span>
-        <span class="value">Windows, Linux, Mac</span>
-      </div>
-      <div class="meta">
         <span class="name">Average Rating</span>
         <span class="value">{{
             (game.stats.ratings.reduce((acc, curr, i) => acc + curr * (i + 1), 0) / totalRatings).toFixed(2)
           }}</span>
-      </div>
-      <div class="meta">
-        <span class="name">Genres</span>
-        <span class="value">Action, Adventure</span>
       </div>
       <!--   TODO: add more metadata about the game   -->
       <div class="meta" v-for="item in Object.entries(game.meta)" :key="item[0]">
