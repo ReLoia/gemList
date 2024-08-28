@@ -10,7 +10,7 @@ from fastapi.security import OAuth2PasswordBearer
 from backend.database.index import get_db
 from backend.database.models import UserEntity
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
 SECRET_KEY = os.getenv("jwt_secret", "beppe")
 ALGORITHM = "HS256"
@@ -51,13 +51,13 @@ async def get_user_from_token(token: str = Depends(oauth2_scheme),
     return user
 
 
-def validate_object_id(obj_id: str):
+def validate_object_id(game_id: str):
     """
-    Validate the obj_id for FastAPI and convert it to ObjectId.
-    If the obj_id is not valid, it will raise a FastAPI HTTPException.
-    :param obj_id:
+    Validate the game_id for FastAPI and convert it to ObjectId.
+    If the game_id is not valid, it will raise a FastAPI HTTPException.
+    :param game_id:
     :return:
     """
-    if not ObjectId.is_valid(obj_id):
+    if not ObjectId.is_valid(game_id):
         raise HTTPException(status_code=400, detail="Invalid task ID")
-    return ObjectId(obj_id)
+    return ObjectId(game_id)

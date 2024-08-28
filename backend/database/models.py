@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, Mapping
+from typing import Optional, Mapping, Any
 from bson import ObjectId
 
 from backend.models import ExternalLink, GameStats, GameCommonMeta
@@ -24,7 +24,7 @@ class GameEntity(BaseModel):
     description: str
     externalLinks: list[ExternalLink]
     stats: GameStats
-    meta: Mapping[GameCommonMeta, any]
+    meta: Mapping[GameCommonMeta, Any]
 
 
 class UserEntity(BaseModel):
@@ -36,5 +36,8 @@ class UserEntity(BaseModel):
     games_played: list[PyObjectId] = Field(default_factory=list)
 
     @staticmethod
-    async def get_user(db, username) -> 'UserEntity':
-        return UserEntity(**(await db["users"].find_one({"username": username})))
+    async def get_user(db, username) -> Optional['UserEntity']:
+        user = await db.get_collection("users").find_one({"username": username})
+        if not user:
+            return None
+        return UserEntity(**user)
