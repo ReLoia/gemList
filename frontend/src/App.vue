@@ -98,9 +98,6 @@ onMounted(calculateMainHeight)
     <router-link to="/friends">Friends</router-link>
   </left-menu>
   <main ref="mainEl">
-    <!--    TEST -->
-    <!--    set username to "mimmo" -->
-    <button @click="user.setUser({username: 'mimmo'})">Set User</button>
     <router-view/>
   </main>
 </template>
@@ -119,7 +116,7 @@ header {
   position: relative;
   z-index: 1;
 
-  height: 80px;
+  min-height: 80px;
 
   transition: .8s all;
 
@@ -209,7 +206,7 @@ header {
   }
 
   &.expanded {
-    height: 340px;
+    min-height: 340px;
 
     --backgroundImage: url("https://avatars.githubusercontent.com/u/37927709?v=4");
     overflow: hidden;

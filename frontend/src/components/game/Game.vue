@@ -8,67 +8,74 @@ import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
 import SmallGameCard from "../common/SmallGameCard.vue";
 import StaffCard from "./ui/StaffCard.vue";
 import AchievementItem from "./ui/AchievementItem.vue";
+import {BackendApiService} from "../../data/remote/BackendApiService";
 
 const gamePageHeader = shallowRef(GamePageHeader)
 const route = useRoute()
 const header = useHeaderStore()
 
-const gameID = route.params.id;
-// TODO: reset to null
-const game = ref<GameModel>({
-  image: "",
-  id: '',
-  title: 'a',
-  description: 'b',
-  externalLinks: [
-    {
-      url: 'http://localhost:8080',
-      img_url: 'https://via.placeholder.com/150'
-    },
-    {
-      url: 'http://localhost:8080',
-      img_url: 'https://via.placeholder.com/150'
-    },
-  ],
-  stats: {
-    likes: 0,
-    ratings: [
-      1, 1, 14, 61, 1, 1, 1, 1, 1, 150
-    ]
-  },
-  meta: {
-    platforms: 'Windows, Linux, Mac',
-    releaseYear: '2021',
-    genres: 'Action, Adventure',
-    developer: 'Ubisoft',
-    publisher: 'Ubisoft',
-  }
-});
-const totalRatings = game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0);
+const gameID: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
+
+const game = ref<GameModel>(null);
+/**
+ * {
+ *   image: "",
+ *   id: '',
+ *   title: 'a',
+ *   description: 'b',
+ *   externalLinks: [
+ *     {
+ *       url: 'http://localhost:8080',
+ *       img_url: 'https://via.placeholder.com/150'
+ *     },
+ *     {
+ *       url: 'http://localhost:8080',
+ *       img_url: 'https://via.placeholder.com/150'
+ *     },
+ *   ],
+ *   stats: {
+ *     likes: 0,
+ *     ratings: [
+ *       1, 1, 14, 61, 1, 1, 1, 1, 1, 150
+ *     ]
+ *   },
+ *   meta: {
+ *     platforms: 'Windows, Linux, Mac',
+ *     releaseYear: '2021',
+ *     genres: 'Action, Adventure',
+ *     developer: 'Ubisoft',
+ *     publisher: 'Ubisoft',
+ *   }
+ * }
+ */
+
+const totalRatings = ref(0);
 const error = ref<string | null>(null);
 
+const api = new BackendApiService()
 
 onMounted(async () => {
   header.setExpanded(true);
   header.setLoading(true);
 
   try {
-    const response = await fetch(`/api/game/${gameID}`);
-    game.value = await response.json();
+    game.value = await api.getGame(gameID);
+    totalRatings.value = game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0);
+
+    header.setContent({
+      component: gamePageHeader,
+      props: {
+        id: game.value.id,
+        title: game.value.title,
+        description: game.value.description,
+        image: game.value.image,
+      }
+    })
   } catch (e) {
     error.value = e.message;
   } finally {
     header.setLoading(false);
   }
-
-  header.setContent({
-    component: gamePageHeader,
-    props: {
-      title: game?.value?.title,
-      description: game?.value?.description,
-      // image:
-    }
-  })
 });
 
 
@@ -76,18 +83,6 @@ onUnmounted(() => {
   header.setExpanded(false)
   header.setContent(() => null)
 })
-
-// TODO: remove metadata template:
-// const metadata = [{
-//   name: 'Rating',
-//   value: '4.5'
-// }, {
-//   name: 'Likes',
-//   value: '100'
-// }, {
-//   name: 'Downloads',
-//   value: '1000'
-// }]
 
 </script>
 
@@ -101,7 +96,6 @@ onUnmounted(() => {
 
       </section>
       <section class="related">
-        <!--   list of related games     -->
         <h2>Related Games</h2>
         <ul>
           <!--          TODO: load related games from backend -->
