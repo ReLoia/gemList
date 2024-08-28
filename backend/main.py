@@ -76,17 +76,47 @@ async def rate_game(
         return {"message": "Rating must be an integer"}
 
     games_collection = db.get_collection("games")
+    user_collection = db.get_collection("users")
+
+    game = await games_collection.find_one({"_id": game_id})
+    game_ratings = game["stats"]["ratings"]
+
+    # check if the user has already rated the game, if he has, update the rating
+    if str(game_id) in user.games_rated:
+        old_rating = user.games_rated[str(game_id)]
+        game_ratings[old_rating - 1] -= 1
+
+    if not game:
+        return {"message": "Game not found"}
+
+    game_ratings[rating - 1] += 1
+
+    await games_collection.update_one({"_id": game_id}, {"$set": {"stats.ratings": game_ratings}})
+    await user_collection.update_one({"_id": user.id}, {"$set": {"games_rated": {str(game_id): rating}}})
+
+    return {"message": "Rating updated"}
+
+
+@app.post("/games/{game_id}/like")
+async def like_game(
+        game_id: str = Depends(validate_object_id),
+        user: UserEntity = Depends(get_user_from_token),
+        db: motor.motor_asyncio.AsyncIOMotorDatabase = Depends(get_db)
+):
+    games_collection = db.get_collection("games")
+    user_collection = db.get_collection("users")
     game = await games_collection.find_one({"_id": game_id})
 
     if not game:
         return {"message": "Game not found"}
 
-    game_ratings = game["stats"]["ratings"]
-    game_ratings[rating - 1] += 1
+    game_likes = game["stats"]["likes"]
+    game_likes += 1
 
-    await games_collection.update_one({"_id": game_id}, {"$set": {"stats.ratings": game_ratings}})
+    await games_collection.update_one({"_id": game_id}, {"$set": {"stats.likes": game_likes}})
+    await user_collection.update_one({"_id": user.id}, {"$push": {"games_liked": game_id}})
 
-    return {"message": "Rating updated"}
+    return {"message": "Game liked"}
 
 
 # Users API

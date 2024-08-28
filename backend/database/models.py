@@ -2,7 +2,7 @@ from pydantic import BaseModel, Field
 from typing import Optional, Mapping, Any
 from bson import ObjectId
 
-from backend.models import ExternalLink, GameStats, GameCommonMeta
+from backend.models import ExternalLink, GameStats, GameCommonMeta, UserModel
 
 
 class PyObjectId(ObjectId):
@@ -31,8 +31,9 @@ class UserEntity(BaseModel):
     id: Optional[PyObjectId] = Field(default_factory=PyObjectId, alias="_id")
     username: str
     password_hash: str
+    profile_pic: str
     games_liked: list[PyObjectId] = Field(default_factory=list)
-    games_rated: Mapping[PyObjectId, int] = Field(default_factory=dict)
+    games_rated: Mapping[str, int] = Field(default_factory=dict)
     games_played: list[PyObjectId] = Field(default_factory=list)
 
     @staticmethod
@@ -41,3 +42,12 @@ class UserEntity(BaseModel):
         if not user:
             return None
         return UserEntity(**user)
+
+    def to_user_model(self):
+        user = self.model_dump()
+        user["id"] = str(user.pop("id"))
+        user.pop("password_hash")
+        user["games_liked"] = [str(game) for game in user["games_liked"]]
+        user["games_played"] = [str(game) for game in user["games_played"]]
+
+        return UserModel(**user)

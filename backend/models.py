@@ -1,3 +1,5 @@
+from typing import Union
+
 from pydantic import BaseModel
 
 
@@ -26,7 +28,7 @@ class GameModel(BaseModel):
     description: str
     externalLinks: list[ExternalLink]
     stats: GameStats
-    meta: GameCommonMeta
+    meta: Union[GameCommonMeta, dict]
 
 
 class UserModel(BaseModel):
