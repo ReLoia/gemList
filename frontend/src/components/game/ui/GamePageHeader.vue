@@ -1,14 +1,35 @@
-<script setup>
+<script setup lang="ts">
+import {mdiPlusCircle, mdiHeartCircle} from '@mdi/js';
+import {BackendApiService} from "../../../data/remote/BackendApiService";
+import {useUserStore} from '../../../store/user';
+import {useRouter} from "vue-router";
 
-import {mdiPlusCircle} from '@mdi/js';
+const router = useRouter()
+const user = useUserStore()
 
-const props = defineProps({
-  title: String,
-  description: String,
-  image: String
-})
+const props = defineProps<{
+  id: string,
+  title: string,
+  description: string,
+  image: string
+}>()
 
-console.log(props.title, props.description, props.image)
+const api = new BackendApiService();
+if (user.username) api.setToken(user.token);
+
+function likeGame(id: string) {
+  api.likeGame(id)
+}
+
+function addGame(id: string) {
+  // if the user is not logged in, redirect to login page
+  if (!user.username) {
+    router.push({name: 'login'})
+    return
+  }
+  // TODO: add game to user list
+  // api.addGame(id)
+}
 
 </script>
 
@@ -23,8 +44,10 @@ console.log(props.title, props.description, props.image)
       </div>
     </div>
     <div class="actions">
-      <!--   Actions -->
-      <button>
+      <button class="like" @click="likeGame(id)" v-if="user.username">
+        <svg-icon type="mdi" :path="mdiHeartCircle"/>
+      </button>
+      <button class="add" @click="addGame(id)">
         <svg-icon type="mdi" :path="mdiPlusCircle"/>
         Add
       </button>
@@ -54,8 +77,14 @@ console.log(props.title, props.description, props.image)
     & > img {
       display: block;
 
-      width: 200px;
-      height: 200px;
+      width: 250px;
+      height: 160px;
+      margin-bottom: 20px;
+      margin-left: -50px;
+
+      object-fit: cover;
+      object-position: 10%;
+      border-radius: 8px;
 
       position: relative;
     }
@@ -63,9 +92,10 @@ console.log(props.title, props.description, props.image)
 
   & > div.actions {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    justify-content: end;
     align-items: end;
-    gap: 20px;
+    gap: 14px;
     padding-bottom: 20px;
 
     & > button {
@@ -86,6 +116,12 @@ console.log(props.title, props.description, props.image)
       & > svg-icon {
         max-height: 24px;
         scale: .9;
+      }
+
+      &.like {
+        border-radius: 50%;
+        padding: 2px;
+        width: fit-content;
       }
 
       &:hover {

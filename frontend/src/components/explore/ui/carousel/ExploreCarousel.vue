@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Card from "./Card.vue";
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 
-defineProps<{
-  items: any[],
+const props = defineProps<{
+  // items: any[],
+  sort: string,
   title: string
 }>();
 const carousel = ref(null)
@@ -40,6 +41,26 @@ function scrollCarousel(direction: 'left' | 'right') {
     behavior: 'smooth'
   })
 }
+
+const items = ref([]);
+const loading = ref(true);
+const error = ref(false);
+
+const fetchGames = async () => {
+  try {
+    const response = await fetch(`/api/games?sort=${props.sort}`);
+    const data = await response.json();
+    items.value = data;
+  } catch (e) {
+    error.value = true;
+  } finally {
+    loading.value = false;
+  }
+}
+
+onMounted(() => {
+  fetchGames();
+})
 
 </script>
 
@@ -124,6 +145,7 @@ function scrollCarousel(direction: 'left' | 'right') {
       display: flex;
       list-style: none;
       gap: 20px;
+      min-height: 150px;
 
       overflow-x: scroll;
       scroll-behavior: smooth;
