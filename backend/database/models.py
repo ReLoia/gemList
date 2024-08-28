@@ -32,7 +32,7 @@ class UserEntity(BaseModel):
     username: str
     password_hash: str
     games_liked: list[PyObjectId] = Field(default_factory=list)
-    # games_rated: Mapping[PyObjectId, int] = Field(default_factory=dict)
+    games_rated: Mapping[PyObjectId, int] = Field(default_factory=dict)
     games_played: list[PyObjectId] = Field(default_factory=list)
 
     @staticmethod

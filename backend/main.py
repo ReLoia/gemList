@@ -54,6 +54,41 @@ async def get_game(
     return {"id": str(game.pop("_id")), **game}
 
 
+@app.post("/games/{game_id}/rate")
+async def rate_game(
+        game_id: str = Depends(validate_object_id),
+        rating: int = -1,
+        user: UserEntity = Depends(get_user_from_token),
+        db: motor.motor_asyncio.AsyncIOMotorDatabase = Depends(get_db)
+):
+    """
+    game["stats"]["rating"] is an array of ratings form 1 to 10 (0-9)
+    so if the user rates 5, we need to increment the 4th index
+    if the user rates a number outside the range or a float, we return an error
+
+    """
+    # TODO: make edits on the user entity when the user rates a game
+
+    if rating not in range(1, 11):
+        return {"message": "Rating must be a number between 1 and 10"}
+
+    if not isinstance(rating, int):
+        return {"message": "Rating must be an integer"}
+
+    games_collection = db.get_collection("games")
+    game = await games_collection.find_one({"_id": game_id})
+
+    if not game:
+        return {"message": "Game not found"}
+
+    game_ratings = game["stats"]["ratings"]
+    game_ratings[rating - 1] += 1
+
+    await games_collection.update_one({"_id": game_id}, {"$set": {"stats.ratings": game_ratings}})
+
+    return {"message": "Rating updated"}
+
+
 # Users API
 @app.post("/login")
 async def login(

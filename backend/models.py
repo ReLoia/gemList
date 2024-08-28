@@ -33,4 +33,5 @@ class UserModel(BaseModel):
     username: str
     profile_pic: str
     games_liked: list[str]
+    games_rated: dict[str, int]
     games_played: list[str]
