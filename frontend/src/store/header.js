@@ -40,6 +40,9 @@ export const useHeaderStore = defineStore('header', {
         },
         setLoading(loading) {
             this.loading = loading;
+        },
+        setBackgroundImage(backgroundImage) {
+            this.backgroundImage = backgroundImage;
         }
     }
 

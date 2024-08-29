@@ -53,7 +53,8 @@ onMounted(calculateMainHeight)
       website is not done for mobile phones currently.</p>
     <p>This popup does not have pointer events enabled, so you can interact with the website.</p>
   </div>
-  <header :class="{ expanded: headerStore.expanded, menuOpen: menuState }" ref="headerEl">
+  <header :class="{ expanded: headerStore.expanded, menuOpen: menuState }" ref="headerEl"
+          :style="{'--backgroundImage': headerStore.backgroundImage}">
     <div class="content">
       <!--      {{  Open-Close burger button   }}-->
       <button class="has-icon" style="scale: 1.7;" @click="menuState = !menuState">
@@ -298,7 +299,7 @@ left-menu {
   margin-top: auto;
 
   background-color: rgba(217, 217, 217, 0.24);
-  z-index: 2;
+  z-index: 20;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: .8s all;
 

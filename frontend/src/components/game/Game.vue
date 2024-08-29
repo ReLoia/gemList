@@ -45,7 +45,8 @@ header.setContent({
     description: game.value.description,
     image: game.value.image,
   }
-})
+});
+header.setBackgroundImage(`url(${game.value.image})`);
 
 // TODO: remove placeholder data
 const totalRatings = ref(game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0));
@@ -70,6 +71,7 @@ onMounted(async () => {
         image: game.value.image,
       }
     })
+    header.setBackgroundImage(`url(${game.value.image})`);
   } catch (e) {
     error.value = e.message;
   } finally {
@@ -81,6 +83,7 @@ onMounted(async () => {
 onUnmounted(() => {
   header.setExpanded(false)
   header.setContent(() => null)
+  header.setBackgroundImage('')
 })
 
 </script>
@@ -100,7 +103,12 @@ onUnmounted(() => {
           <!--          TODO: load related games from backend -->
           <SmallGameCard id="1" img_url="https://via.placeholder.com/150"/>
         </ul>
-
+      </section>
+      <section>
+        <h2>Games from the Same Publisher</h2>
+        <ul>
+          <SmallGameCard id="1" img_url="https://via.placeholder.com/150"/>
+        </ul>
       </section>
       <section>
         <h2>Staff</h2>
