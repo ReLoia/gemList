@@ -15,6 +15,11 @@ const routes = [
     {path: '/explore', component: () => import('./components/explore/Explore.vue')},
     {path: '/game/:id', component: () => import('./components/game/Game.vue')},
 
+    {path: '/login', component: () => import('./components/user/Login.vue')},
+    {path: '/register', component: () => import('./components/user/Register.vue')},
+    {path: '/profile', component: () => import('./components/user/Profile.vue')},
+    {path: '/user/:id', component: () => import('./components/user/User.vue')},
+
     //     TODO: change the path to the correct components
     {path: '/staff/:id', component: () => import('./components/404/NotFound.vue')},
     {path: '/achievement/:id', component: () => import('./components/404/NotFound.vue')},
@@ -23,10 +28,6 @@ const routes = [
     {path: '/library', component: () => import('./components/404/NotFound.vue')},
     {path: '/community', component: () => import('./components/404/NotFound.vue')},
     {path: '/friends', component: () => import('./components/404/NotFound.vue')},
-
-    {path: '/login', component: () => import('./components/404/NotFound.vue')},
-    {path: '/register', component: () => import('./components/404/NotFound.vue')},
-    {path: '/profile', component: () => import('./components/404/NotFound.vue')},
 
     {path: '/:pathMatch(.*)*', component: () => import('./components/404/NotFound.vue')},
 ].map(route => {
