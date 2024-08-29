@@ -8,7 +8,7 @@ import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
 import SmallGameCard from "../common/SmallGameCard.vue";
 import StaffCard from "./ui/StaffCard.vue";
 import AchievementItem from "./ui/AchievementItem.vue";
-import {BackendApiService} from "../../data/remote/BackendApiService";
+import {BackendApiService} from "../../api/backend";
 
 const gamePageHeader = shallowRef(GamePageHeader)
 const route = useRoute()

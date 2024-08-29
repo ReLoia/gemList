@@ -45,14 +45,18 @@ const router = createRouter({
 const pinia = createPinia()
 const app = createApp(App)
     .use(pinia);
+
 const userStore = useUserStore()
 const {username} = storeToRefs(userStore)
 
-router.beforeEach((to, from, next) => {
-    const userIsLogged = username.value !== '';
+router.beforeEach(async (to, from, next) => {
+    const token = localStorage.getItem('access_token')
+    const userIsLogged = token !== null;
+
     if (to.path === '/' && !userIsLogged) {
         next('/explore')
     } else {
+        await userStore.loadUser(token)
         next()
     }
 });

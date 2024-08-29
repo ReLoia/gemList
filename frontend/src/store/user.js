@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+import {BackendApiService} from "../api/backend.ts";
 
 export const useUserStore = defineStore('user', {
     state: () => {
@@ -11,7 +12,23 @@ export const useUserStore = defineStore('user', {
     actions: {
         setUser(userdata) {
             this.username = userdata.username;
-            this.avatar = userdata.avatar;
+            if (userdata.avatar) this.avatar = userdata.avatar;
+        },
+        async loadUser(token) {
+            this.token = token;
+            localStorage.setItem('access_token', token);
+            const api = new BackendApiService();
+            api.setToken(token);
+
+            let user;
+            try {
+                user = await api.getUser();
+                this.setUser(user);
+            } catch (e) {
+                console.log(e)
+            }
+
+            // ap
         }
     }
 
