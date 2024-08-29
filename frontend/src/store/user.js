@@ -15,6 +15,7 @@ export const useUserStore = defineStore('user', {
             if (userdata.avatar) this.avatar = userdata.avatar;
         },
         async loadUser(token) {
+            if (!token) return;
             this.token = token;
             localStorage.setItem('access_token', token);
             const api = new BackendApiService();

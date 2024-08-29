@@ -6,6 +6,8 @@ import {useRouter} from "vue-router";
 const api = new BackendApiService()
 const router = useRouter()
 
+const redirect = new URLSearchParams(location.search).get('redirect')
+
 async function login(event: SubmitEvent) {
   event.preventDefault()
 
@@ -16,7 +18,7 @@ async function login(event: SubmitEvent) {
     const result = await api.login(username, password);
     if (result.access_token) {
       localStorage.setItem('access_token', result.access_token)
-      await router.push('/')
+      await router.push(redirect || '/')
     }
   } catch (e) {
     console.error(e)

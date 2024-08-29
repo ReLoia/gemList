@@ -7,7 +7,7 @@ import {useRouter} from "vue-router";
 const router = useRouter()
 const user = useUserStore()
 
-const props = defineProps<{
+defineProps<{
   id: string,
   title: string,
   description: string,
@@ -27,7 +27,7 @@ function addGame(id: string) {
     router.push({name: 'login'})
     return
   }
-  // TODO: add game to user list
+
   // api.addGame(id)
 }
 
