@@ -243,7 +243,7 @@ header {
   &.expanded {
     min-height: 340px;
 
-    --backgroundImage: url("https://avatars.githubusercontent.com/u/37927709?v=4");
+    --backgroundImage: url("https://api.dicebear.com/9.x/adventurer/png?backgroundColor=b6e3f4,c0aede,d1d4f9");
     overflow: hidden;
 
     color: #fff;
@@ -257,6 +257,7 @@ header {
       height: 100%;
       content: '';
 
+      background-color: red;
       background-image: var(--backgroundImage);
       background-repeat: no-repeat;
       background-size: cover;
@@ -373,6 +374,12 @@ main {
   padding-top: 20px;
 
   box-sizing: border-box;
+
+  &.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 

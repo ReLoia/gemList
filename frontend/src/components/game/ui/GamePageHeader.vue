@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {mdiPlusCircle, mdiHeartCircle} from '@mdi/js';
-import {BackendApiService} from "../../../data/remote/BackendApiService";
+import {BackendApiService} from "../../../api/backend";
 import {useUserStore} from '../../../store/user';
 import {useRouter} from "vue-router";
 
