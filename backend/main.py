@@ -6,12 +6,16 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 
 from backend.database.auth.auth import verify_password, get_password_hash
 from backend.database.auth.security import get_user_from_token, create_access_token, validate_object_id
-from backend.database.models import UserEntity
+from backend.database.models import UserEntity, UserModel
 from backend.models import GameModel
-from database.index import get_db
+from backend.database.index import get_db
 import motor.motor_asyncio
 
-app = FastAPI()
+app = FastAPI(
+    title="GemList API",
+    description="API for gemList",
+    version="1.0"
+)
 load_dotenv()
 
 
@@ -154,3 +158,10 @@ async def register(
     access_token = create_access_token(data={"sub": new_user.username})
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get("/users/me", response_model=UserModel)
+async def get_user(
+        user: UserEntity = Depends(get_user_from_token)
+):
+    return user.to_user_model()

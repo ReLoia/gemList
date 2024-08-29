@@ -8,7 +8,7 @@ import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
 import SmallGameCard from "../common/SmallGameCard.vue";
 import StaffCard from "./ui/StaffCard.vue";
 import AchievementItem from "./ui/AchievementItem.vue";
-import {BackendApiService} from "../../data/remote/BackendApiService";
+import {BackendApiService} from "../../api/backend";
 
 const gamePageHeader = shallowRef(GamePageHeader)
 const route = useRoute()
@@ -16,40 +16,40 @@ const header = useHeaderStore()
 
 const gameID: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 
-const game = ref<GameModel>(null);
-/**
- * {
- *   image: "",
- *   id: '',
- *   title: 'a',
- *   description: 'b',
- *   externalLinks: [
- *     {
- *       url: 'http://localhost:8080',
- *       img_url: 'https://via.placeholder.com/150'
- *     },
- *     {
- *       url: 'http://localhost:8080',
- *       img_url: 'https://via.placeholder.com/150'
- *     },
- *   ],
- *   stats: {
- *     likes: 0,
- *     ratings: [
- *       1, 1, 14, 61, 1, 1, 1, 1, 1, 150
- *     ]
- *   },
- *   meta: {
- *     platforms: 'Windows, Linux, Mac',
- *     releaseYear: '2021',
- *     genres: 'Action, Adventure',
- *     developer: 'Ubisoft',
- *     publisher: 'Ubisoft',
- *   }
- * }
- */
+// TODO: remove placeholder data
+const game = ref<GameModel>({
+      image: "https://steamcdn-a.akamaihd.net/steam/apps/292030/header.jpg?t=1631046447",
+      id: '66cdb5a1055b02fda758c0f6',
+      title: 'The Witcher 3: Wild Hunt',
+      description: 'The Witcher 3: Wild Hunt is a 2015 action role-playing game developed and published by CD Projekt. Based on The Witcher series of fantasy novels by Andrzej Sapkowski, it is the sequel to the 2011 game The Witcher 2: Assassins of Kings. Played in an open world with a third-person perspective, players control protagonist Geralt of Rivia, a monster hunter known as a witcher, who is looking for his missing adopted daughter on the run from the Wild Hunt: an otherworldly force determined to capture and use her powers.',
+      externalLinks: [{
+        url: 'http://localhost:8080',
+        img_url: 'https://via.placeholder.com/150'
+      }, {url: 'http://localhost:8080', img_url: 'https://via.placeholder.com/150'},],
+      stats: {likes: 0, ratings: [1, 1, 14, 61, 1, 1, 1, 1, 1, 150]},
+      meta: {
+        platforms: 'Windows, Linux, Mac',
+        releaseYear: '2021',
+        genres: 'Action, Adventure',
+        developer: 'Ubisoft',
+        publisher: 'Ubisoft',
+      }
+    }
+);
+// TODO: remove placeholder data
+header.setContent({
+  component: gamePageHeader,
+  props: {
+    id: game.value.id,
+    title: game.value.title,
+    description: game.value.description,
+    image: game.value.image,
+  }
+});
+header.setBackgroundImage(`url(${game.value.image})`);
 
-const totalRatings = ref(0);
+// TODO: remove placeholder data
+const totalRatings = ref(game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0));
 const error = ref<string | null>(null);
 
 const api = new BackendApiService()
@@ -71,6 +71,7 @@ onMounted(async () => {
         image: game.value.image,
       }
     })
+    header.setBackgroundImage(`url(${game.value.image})`);
   } catch (e) {
     error.value = e.message;
   } finally {
@@ -82,6 +83,7 @@ onMounted(async () => {
 onUnmounted(() => {
   header.setExpanded(false)
   header.setContent(() => null)
+  header.setBackgroundImage('')
 })
 
 </script>
@@ -101,7 +103,12 @@ onUnmounted(() => {
           <!--          TODO: load related games from backend -->
           <SmallGameCard id="1" img_url="https://via.placeholder.com/150"/>
         </ul>
-
+      </section>
+      <section>
+        <h2>Games from the Same Publisher</h2>
+        <ul>
+          <SmallGameCard id="1" img_url="https://via.placeholder.com/150"/>
+        </ul>
       </section>
       <section>
         <h2>Staff</h2>
@@ -174,9 +181,10 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   max-width: 1400px;
-  margin: auto;
+  margin: auto auto 200px;
 
   padding-inline: 15px;
+
 
   & > .content {
     grid-area: content;

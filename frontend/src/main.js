@@ -11,9 +11,14 @@ String.prototype.capitalize = function () {
 }
 
 const routes = [
-    {path: '/', component: () => import('./components/home/Home.vue')},
-    {path: '/explore', component: () => import('./components/explore/Explore.vue')},
+    {path: '/', component: () => import('./components/home/Home.vue'), meta: {title: 'Home'}},
+    {path: '/explore', component: () => import('./components/explore/Explore.vue'), meta: {title: 'Explore'}},
     {path: '/game/:id', component: () => import('./components/game/Game.vue')},
+
+    {path: '/login', component: () => import('./components/user/Login.vue'), meta: {title: 'Login'}},
+    {path: '/register', component: () => import('./components/user/Register.vue'), meta: {title: 'Register'}},
+    {path: '/profile', component: () => import('./components/user/profile/Profile.vue'), meta: {requiresAuth: true}},
+    {path: '/user/:id', component: () => import('./components/user/User.vue')},
 
     //     TODO: change the path to the correct components
     {path: '/staff/:id', component: () => import('./components/404/NotFound.vue')},
@@ -23,10 +28,6 @@ const routes = [
     {path: '/library', component: () => import('./components/404/NotFound.vue')},
     {path: '/community', component: () => import('./components/404/NotFound.vue')},
     {path: '/friends', component: () => import('./components/404/NotFound.vue')},
-
-    {path: '/login', component: () => import('./components/404/NotFound.vue')},
-    {path: '/register', component: () => import('./components/404/NotFound.vue')},
-    {path: '/profile', component: () => import('./components/404/NotFound.vue')},
 
     {path: '/:pathMatch(.*)*', component: () => import('./components/404/NotFound.vue')},
 ].map(route => {
@@ -44,14 +45,26 @@ const router = createRouter({
 const pinia = createPinia()
 const app = createApp(App)
     .use(pinia);
-const userStore = useUserStore()
-const {username} = storeToRefs(userStore)
 
-router.beforeEach((to, from, next) => {
-    const userIsLogged = username.value !== '';
+router.beforeEach(async (to, from, next) => {
+    if (to.meta.title) {
+        document.title = to.meta.title + ' - gemList'
+    }
+
+    const token = localStorage.getItem('access_token')
+    const userIsLogged = token !== null;
+
+    const userStore = useUserStore();
+
+    if (to.matched.some(record => record.meta.requiresAuth) && !userIsLogged) {
+        next('/login?redirect=' + to.fullPath)
+        return;
+    }
+
     if (to.path === '/' && !userIsLogged) {
         next('/explore')
     } else {
+        await userStore.loadUser(token)
         next()
     }
 });

@@ -1,4 +1,4 @@
-import {AuthResponse, GameModel, UserModel} from "../../types/common";
+import {AuthResponse, GameModel, UserModel} from "../types/common";
 
 export class BackendApiService {
     private baseUrl: string = "/api"
@@ -14,9 +14,9 @@ export class BackendApiService {
     }
 
     // Helper method to handle the headers
-    private getHeaders(authenticated: boolean = false) {
+    private getHeaders(authenticated: boolean = false, formData: boolean = false): HeadersInit {
         const headers: HeadersInit = {
-            "Content-Type": "application/json",
+            "Content-Type": formData ? "application/x-www-form-urlencoded" : "application/json",
         };
         if (authenticated && this.token) {
             headers["Authorization"] = `Bearer ${this.token}`;
@@ -75,8 +75,8 @@ export class BackendApiService {
     async login(username: string, password: string): Promise<AuthResponse> {
         const response = await fetch(`${this.baseUrl}/login`, {
             method: "POST",
-            headers: this.getHeaders(),
-            body: JSON.stringify({username, password}),
+            headers: this.getHeaders(false, true),
+            body: `username=${username}&password=${password}`,
         });
         if (!response.ok) {
             throw new Error("Login failed");
@@ -90,8 +90,8 @@ export class BackendApiService {
     async register(username: string, password: string): Promise<AuthResponse> {
         const response = await fetch(`${this.baseUrl}/register`, {
             method: "POST",
-            headers: this.getHeaders(),
-            body: JSON.stringify({username, password}),
+            headers: this.getHeaders(false, true),
+            body: `username=${username}&password=${password}`,
         });
         if (!response.ok) {
             throw new Error("Registration failed");

@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import {mdiPlusCircle, mdiHeartCircle} from '@mdi/js';
-import {BackendApiService} from "../../../data/remote/BackendApiService";
+import {BackendApiService} from "../../../api/backend";
 import {useUserStore} from '../../../store/user';
 import {useRouter} from "vue-router";
 
 const router = useRouter()
 const user = useUserStore()
 
-const props = defineProps<{
+defineProps<{
   id: string,
   title: string,
   description: string,
@@ -27,7 +27,7 @@ function addGame(id: string) {
     router.push({name: 'login'})
     return
   }
-  // TODO: add game to user list
+
   // api.addGame(id)
 }
 

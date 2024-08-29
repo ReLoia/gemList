@@ -2,15 +2,15 @@
 import '@jamescoyle/svg-icon'
 import {mdiMenu, mdiClose, mdiMagnify, mdiCog} from "@mdi/js";
 
-import {useRouter} from "vue-router";
-
-const router = useRouter();
-
 import {onMounted, ref, watch} from "vue";
 
 import {useUserStore} from "./store/user.js";
 import {useHeaderStore} from "./store/header.js";
 import LoadingBar from "./components/common/LoadingBar.vue";
+
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const user = useUserStore()
 const headerStore = useHeaderStore()
@@ -26,13 +26,14 @@ function calculateMainHeight(setHeaderHeight) {
 //   calculate the main height and put it in CSS
 //   100svh - header height - footer height
   /** @type {HTMLElement} */
-  const mainElement = mainEl.value
+  const mainElement = mainEl.value;
+  if (!mainElement) return;
   if (setHeaderHeight) {
-    mainElement.style.height = `calc(100vh - ${setHeaderHeight}px)`
+    mainElement.style.minHeight = `calc(100vh - ${setHeaderHeight}px)`
   } else {
     /** @type {HTMLElement} */
     const headerElement = headerEl.value
-    mainElement.style.height = `calc(100vh - ${headerElement.clientHeight}px)`
+    mainElement.style.minHeight = `calc(100vh - ${headerElement.clientHeight}px)`
   }
 }
 
@@ -47,7 +48,17 @@ onMounted(calculateMainHeight)
 
 <template>
   <LoadingBar v-if="headerStore.loading"/>
-  <header :class="{ expanded: headerStore.expanded, menuOpen: menuState }" ref="headerEl">
+  <div class="popup-disclaimer">
+    <!--  Disclaimer that says that the website is not finished and that the backend is done but I don't know a free place to host it on. Also the website is not done for mobile phones currently  -->
+    <p>This website is not finished yet. The backend is done but I don't know a free place to host it on. Also the
+      website is not done for mobile phones currently.</p>
+    <p>This popup does not have pointer events enabled, so you can interact with the website.</p>
+    <br>
+    <br>
+    <p>If you want to collaborate, please contact me on github </p>
+  </div>
+  <header :class="{ expanded: headerStore.expanded, menuOpen: menuState }" ref="headerEl"
+          :style="{'--backgroundImage': headerStore.backgroundImage}">
     <div class="content">
       <!--      {{  Open-Close burger button   }}-->
       <button class="has-icon" style="scale: 1.7;" @click="menuState = !menuState">
@@ -103,6 +114,35 @@ onMounted(calculateMainHeight)
 </template>
 
 <style scoped>
+/* TODO: remove disclaimer data */
+.popup-disclaimer {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 12px;
+
+  pointer-events: none;
+
+  background-color: rgba(0, 0, 0, 0.3);
+  color: #b20000;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px 0;
+  justify-content: center;
+  align-items: center;
+
+  z-index: 1000;
+
+
+  & > p {
+    max-width: 80%;
+    text-align: center;
+  }
+}
+
 header {
   background-color: rgba(217, 217, 217, 0.12);
   color: #000;
@@ -147,6 +187,10 @@ header {
       justify-content: center;
       gap: 18px;
       position: relative;
+
+      button {
+        border-radius: 50%;
+      }
 
       & > div.search {
         display: flex;
@@ -208,7 +252,7 @@ header {
   &.expanded {
     min-height: 340px;
 
-    --backgroundImage: url("https://avatars.githubusercontent.com/u/37927709?v=4");
+    --backgroundImage: url("https://api.dicebear.com/9.x/adventurer/png?backgroundColor=b6e3f4,c0aede,d1d4f9");
     overflow: hidden;
 
     color: #fff;
@@ -222,6 +266,7 @@ header {
       height: 100%;
       content: '';
 
+      background-color: red;
       background-image: var(--backgroundImage);
       background-repeat: no-repeat;
       background-size: cover;
@@ -262,7 +307,7 @@ left-menu {
   margin-top: auto;
 
   background-color: rgba(217, 217, 217, 0.24);
-  z-index: 2;
+  z-index: 20;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   transition: .8s all;
 
@@ -272,6 +317,16 @@ left-menu {
 
   &.expanded {
     transform: translateX(0);
+  }
+
+  &:not(.expanded) {
+    & > a:focus {
+      position: absolute;
+      left: 100%;
+      background: rgba(217, 217, 217, 0.24);
+      backdrop-filter: blur(20px);
+
+    }
   }
 
   & > a {
@@ -338,6 +393,12 @@ main {
   padding-top: 20px;
 
   box-sizing: border-box;
+
+  &.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 
