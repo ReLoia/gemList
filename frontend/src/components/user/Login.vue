@@ -73,10 +73,10 @@ div.card {
 
   border-radius: 12px;
 
-  background: white;
-  color: black;
+  background: #4e2f2f;
+  color: white;
 
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 16px rgba(0, 0, 0, 0.6);
 
   overflow: hidden;
 
@@ -98,7 +98,7 @@ div.card {
       }
 
       & > p:not(.register) {
-        font-size: 1.05rem;
+        font-size: 1.15rem;
         max-width: 300px;
       }
 
@@ -106,7 +106,6 @@ div.card {
     }
 
     &.form {
-      background: #f0f0f0;
       padding: 20px;
       border-left: 1px solid #e0e0e0;
 

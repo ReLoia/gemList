@@ -90,8 +90,8 @@ export class BackendApiService {
     async register(username: string, password: string): Promise<AuthResponse> {
         const response = await fetch(`${this.baseUrl}/register`, {
             method: "POST",
-            headers: this.getHeaders(),
-            body: JSON.stringify({username, password}),
+            headers: this.getHeaders(false, true),
+            body: `username=${username}&password=${password}`,
         });
         if (!response.ok) {
             throw new Error("Registration failed");
