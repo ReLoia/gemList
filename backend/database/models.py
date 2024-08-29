@@ -43,7 +43,7 @@ class UserEntity(BaseModel):
             return None
         return UserEntity(**user)
 
-    def to_user_model(self):
+    def to_user_model(self) -> UserModel:
         user = self.model_dump()
         user["id"] = str(user.pop("id"))
         user.pop("password_hash")
