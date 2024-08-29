@@ -17,6 +17,8 @@ export class BackendApiService {
     private getHeaders(authenticated: boolean = false, formData: boolean = false): HeadersInit {
         const headers: HeadersInit = {
             "Content-Type": formData ? "application/x-www-form-urlencoded" : "application/json",
+            // Skip the browser warning for ngrok
+            "ngrok-skip-browser-warning": "true",
         };
         if (authenticated && this.token) {
             headers["Authorization"] = `Bearer ${this.token}`;

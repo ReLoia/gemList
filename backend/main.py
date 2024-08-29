@@ -3,6 +3,7 @@ from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 
 from backend.database.auth.auth import verify_password, get_password_hash
 from backend.database.auth.security import get_user_from_token, create_access_token, validate_object_id
@@ -11,12 +12,25 @@ from backend.models import GameModel
 from backend.database.index import get_db
 import motor.motor_asyncio
 
+origins = [
+    "http://localhost",
+    "http://localhost:5173",
+    "https://gem-list.vercel.app"
+]
+
 app = FastAPI(
     title="GemList API",
     description="API for gemList",
     version="1.0"
 )
 load_dotenv()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
