@@ -2,9 +2,9 @@
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Card from "./Card.vue";
 import {onMounted, ref} from "vue";
+import {BackendApiService} from "../../../../data/remote/BackendApiService";
 
 const props = defineProps<{
-  // items: any[],
   sort: string,
   title: string
 }>();
@@ -42,15 +42,53 @@ function scrollCarousel(direction: 'left' | 'right') {
   })
 }
 
-const items = ref([]);
+const api = new BackendApiService();
+
+// TODO: remove placeholder data
+const items = ref([
+  {
+    image: "https://steamcdn-a.akamaihd.net/steam/apps/292030/header.jpg?t=1631046447",
+    id: '66cdb5a1055b02fda758c0f6',
+    title: 'The Witcher 3: Wild Hunt',
+    description: 'The Witcher 3: Wild Hunt is a 2015 action role-playing game developed and published by CD Projekt. Based on The Witcher series of fantasy novels by Andrzej Sapkowski, it is the sequel to the 2011 game The Witcher 2: Assassins of Kings. Played in an open world with a third-person perspective, players control protagonist Geralt of Rivia, a monster hunter known as a witcher, who is looking for his missing adopted daughter on the run from the Wild Hunt: an otherworldly force determined to capture and use her powers.',
+    externalLinks: [{
+      url: 'http://localhost:8080',
+      img_url: 'https://via.placeholder.com/150'
+    }, {url: 'http://localhost:8080', img_url: 'https://via.placeholder.com/150'},],
+    stats: {likes: 0, ratings: [1, 1, 14, 61, 1, 1, 1, 1, 1, 150]},
+    meta: {
+      platforms: 'Windows, Linux, Mac',
+      releaseYear: '2021',
+      genres: 'Action, Adventure',
+      developer: 'Ubisoft',
+      publisher: 'Ubisoft',
+    }
+  },
+  {
+    image: "https://steamcdn-a.akamaihd.net/steam/apps/292030/header.jpg?t=1631046447",
+    id: '66cdb5a1055b02fda758c0f6',
+    title: 'The Witcher 3: Wild Hunt',
+    description: 'The Witcher 3: Wild Hunt is a 2015 action role-playing game developed and published by CD Projekt. Based on The Witcher series of fantasy novels by Andrzej Sapkowski, it is the sequel to the 2011 game The Witcher 2: Assassins of Kings. Played in an open world with a third-person perspective, players control protagonist Geralt of Rivia, a monster hunter known as a witcher, who is looking for his missing adopted daughter on the run from the Wild Hunt: an otherworldly force determined to capture and use her powers.',
+    externalLinks: [{
+      url: 'http://localhost:8080',
+      img_url: 'https://via.placeholder.com/150'
+    }, {url: 'http://localhost:8080', img_url: 'https://via.placeholder.com/150'},],
+    stats: {likes: 0, ratings: [1, 1, 14, 61, 1, 1, 1, 1, 1, 150]},
+    meta: {
+      platforms: 'Windows, Linux, Mac',
+      releaseYear: '2021',
+      genres: 'Action, Adventure',
+      developer: 'Ubisoft',
+      publisher: 'Ubisoft',
+    }
+  }
+]);
 const loading = ref(true);
 const error = ref(false);
 
 const fetchGames = async () => {
   try {
-    const response = await fetch(`/api/games?sort=${props.sort}`);
-    const data = await response.json();
-    items.value = data;
+    items.value = await api.getGames(props.sort);
   } catch (e) {
     error.value = true;
   } finally {
