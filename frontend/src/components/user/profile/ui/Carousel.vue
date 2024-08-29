@@ -1,11 +1,24 @@
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
+import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
+import {GameModel} from "../../../../types/common";
+import {BackendApiService} from "../../../../api/backend";
+import Card from "../../../explore/ui/carousel/Card.vue";
 
-defineProps<{
+const props = defineProps<{
   title: string,
   items: string[]
 }>()
+
+const items = ref<GameModel[]>([])
+const api = new BackendApiService()
+
+try {
+  api.getGamesFromIds(props.items).then(res => items.value = res)
+} catch (e) {
+  console.error(e)
+}
 
 const carousel = ref(null)
 
@@ -41,13 +54,15 @@ function scrollCarousel(direction: 'left' | 'right') {
   })
 }
 
-import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 </script>
 
 <template>
   <section class="carousel">
     <span class="carousel-title">{{ title }}</span>
-    <div class="container">
+    <div class="container" v-if="items.length === 0">
+      <p>The list is empty</p>
+    </div>
+    <div class="container" v-else>
       <button @click="scrollCarousel('left')" :class="{ disabled: !canScrollLeft }">
         <svg-icon type="mdi" :path="mdiChevronLeft"/>
       </button>
@@ -75,9 +90,14 @@ import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
   & > .container {
     display: flex;
     flex-direction: row;
-    align-items: flex-end;
+
 
     position: relative;
+    min-height: 140px;
+
+    & > p {
+      margin-top: 20px;
+    }
 
     & > button {
       position: absolute;

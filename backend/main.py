@@ -1,8 +1,9 @@
 from bson import ObjectId
-from fastapi import FastAPI, Depends
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import RedirectResponse
 from dotenv import load_dotenv
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.middleware.cors import CORSMiddleware
 
 from backend.database.auth.auth import verify_password, get_password_hash
 from backend.database.auth.security import get_user_from_token, create_access_token, validate_object_id
@@ -11,12 +12,25 @@ from backend.models import GameModel
 from backend.database.index import get_db
 import motor.motor_asyncio
 
+origins = [
+    "http://localhost",
+    "http://localhost:5173",
+    "https://gem-list.vercel.app"
+]
+
 app = FastAPI(
     title="GemList API",
     description="API for gemList",
     version="1.0"
 )
 load_dotenv()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/")
@@ -74,10 +88,10 @@ async def rate_game(
     # TODO: make edits on the user entity when the user rates a game
 
     if rating not in range(1, 11):
-        return {"message": "Rating must be a number between 1 and 10"}
+        raise HTTPException(status_code=400, detail="Rating must be between 1 and 10")
 
     if not isinstance(rating, int):
-        return {"message": "Rating must be an integer"}
+        raise HTTPException(status_code=400, detail="Rating must be an integer")
 
     games_collection = db.get_collection("games")
     user_collection = db.get_collection("users")
@@ -91,7 +105,7 @@ async def rate_game(
         game_ratings[old_rating - 1] -= 1
 
     if not game:
-        return {"message": "Game not found"}
+        raise HTTPException(status_code=404, detail="Game not found")
 
     game_ratings[rating - 1] += 1
 
@@ -112,7 +126,7 @@ async def like_game(
     game = await games_collection.find_one({"_id": game_id})
 
     if not game:
-        return {"message": "Game not found"}
+        raise HTTPException(status_code=404, detail="Game not found")
 
     game_likes = game["stats"]["likes"]
     game_likes += 1
@@ -123,6 +137,24 @@ async def like_game(
     return {"message": "Game liked"}
 
 
+@app.post("/games/get")
+async def get_games_from_ids(
+        game_ids: list[str],
+        db: motor.motor_asyncio.AsyncIOMotorDatabase = Depends(get_db)
+):
+    for game_id in game_ids:
+        if not ObjectId.is_valid(game_id):
+            raise HTTPException(status_code=400, detail="Invalid ObjectId")
+
+    games_collection = db.get_collection("games")
+    games = await games_collection.find({"_id": {"$in": [ObjectId(game_id) for game_id in game_ids]}}).to_list(40)
+
+    for game in games:
+        game["id"] = str(game.pop("_id"))
+
+    return games
+
+
 # Users API
 @app.post("/login")
 async def login(
@@ -131,9 +163,9 @@ async def login(
 ):
     user = await UserEntity.get_user(db, form_data.username)
     if not user:
-        return {"error": "User not found"}
+        raise HTTPException(status_code=404, detail="User not found")
     if not verify_password(form_data.password, user.password_hash):
-        return {"error": "Incorrect password"}
+        raise HTTPException(status_code=400, detail="Incorrect password")
 
     access_token = create_access_token(data={"sub": user.username})
 
@@ -147,13 +179,14 @@ async def register(
 ):
     user = await UserEntity.get_user(db, form_data.username)
     if user:
-        return {"error": "User already exists"}
+        raise HTTPException(status_code=400, detail="User already exists")
 
-    new_user = UserEntity(username=form_data.username, password_hash=get_password_hash(form_data.password))
+    new_user = UserEntity(username=form_data.username, password_hash=get_password_hash(form_data.password),
+                          profile_pic="", games_liked=[], games_rated={}, games_played=[])
 
     result = await db.get_collection("users").insert_one(new_user.model_dump())
     if not result.acknowledged:
-        return {"error": "Error creating user"}
+        raise HTTPException(status_code=500, detail="Failed to register user")
 
     access_token = create_access_token(data={"sub": new_user.username})
 
@@ -162,6 +195,7 @@ async def register(
 
 @app.get("/users/me", response_model=UserModel)
 async def get_user(
-        user: UserEntity = Depends(get_user_from_token)
+        user: UserEntity = Depends(get_user_from_token),
 ):
+    # TODO: load every game the user has liked, rated and played
     return user.to_user_model()

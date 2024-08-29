@@ -16,6 +16,9 @@ export const useUserStore = defineStore('user', {
         setUser(userdata) {
             this.username = userdata.username;
             if (userdata.avatar) this.avatar = userdata.avatar;
+            this.games_rated = userdata.games_rated;
+            this.games_played = userdata.games_played;
+            this.games_liked = userdata.games_liked;
         },
         async loadUser(token) {
             if (!token) return;

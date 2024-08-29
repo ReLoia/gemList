@@ -17,6 +17,8 @@ export class BackendApiService {
     private getHeaders(authenticated: boolean = false, formData: boolean = false): HeadersInit {
         const headers: HeadersInit = {
             "Content-Type": formData ? "application/x-www-form-urlencoded" : "application/json",
+            // Skip the browser warning for ngrok
+            "ngrok-skip-browser-warning": "true",
         };
         if (authenticated && this.token) {
             headers["Authorization"] = `Bearer ${this.token}`;
@@ -28,6 +30,20 @@ export class BackendApiService {
     async getGames(sort: string = "recent"): Promise<GameModel[]> {
         const response = await fetch(`${this.baseUrl}/games?sort=${sort}`, {
             headers: this.getHeaders(),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch games");
+        }
+        return response.json();
+    }
+
+
+    // POST /games/get
+    async getGamesFromIds(ids: string[]): Promise<GameModel[]> {
+        const response = await fetch(`${this.baseUrl}/games/get`, {
+            method: "POST",
+            headers: this.getHeaders(),
+            body: JSON.stringify(ids),
         });
         if (!response.ok) {
             throw new Error("Failed to fetch games");

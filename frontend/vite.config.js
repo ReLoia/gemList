@@ -23,7 +23,7 @@ export default defineConfig({
         proxy: {
             '/api': {
                 // TODO: change to backend url
-                target: 'http://localhost:8000',
+                target: 'https://4431-129-152-6-232.ngrok-free.app/',
                 changeOrigin: true,
                 rewrite: path => path.replace(/^\/api/, '')
             }
