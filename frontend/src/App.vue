@@ -53,6 +53,9 @@ onMounted(calculateMainHeight)
     <p>This website is not finished yet. The backend is done but I don't know a free place to host it on. Also the
       website is not done for mobile phones currently.</p>
     <p>This popup does not have pointer events enabled, so you can interact with the website.</p>
+    <br>
+    <br>
+    <p>If you want to collaborate, please contact me on github </p>
   </div>
   <header :class="{ expanded: headerStore.expanded, menuOpen: menuState }" ref="headerEl"
           :style="{'--backgroundImage': headerStore.backgroundImage}">
