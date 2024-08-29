@@ -17,7 +17,7 @@ const routes = [
 
     {path: '/login', component: () => import('./components/user/Login.vue'), meta: {title: 'Login'}},
     {path: '/register', component: () => import('./components/user/Register.vue'), meta: {title: 'Register'}},
-    {path: '/profile', component: () => import('./components/user/Profile.vue'), meta: {requiresAuth: true}},
+    {path: '/profile', component: () => import('./components/user/profile/Profile.vue'), meta: {requiresAuth: true}},
     {path: '/user/:id', component: () => import('./components/user/User.vue')},
 
     //     TODO: change the path to the correct components

@@ -2,15 +2,15 @@
 import '@jamescoyle/svg-icon'
 import {mdiMenu, mdiClose, mdiMagnify, mdiCog} from "@mdi/js";
 
-import {useRouter} from "vue-router";
-
-const router = useRouter();
-
 import {onMounted, ref, watch} from "vue";
 
 import {useUserStore} from "./store/user.js";
 import {useHeaderStore} from "./store/header.js";
 import LoadingBar from "./components/common/LoadingBar.vue";
+
+import {useRouter} from "vue-router";
+
+const router = useRouter();
 
 const user = useUserStore()
 const headerStore = useHeaderStore()
@@ -26,13 +26,14 @@ function calculateMainHeight(setHeaderHeight) {
 //   calculate the main height and put it in CSS
 //   100svh - header height - footer height
   /** @type {HTMLElement} */
-  const mainElement = mainEl.value
+  const mainElement = mainEl.value;
+  if (!mainElement) return;
   if (setHeaderHeight) {
-    mainElement.style.height = `calc(100vh - ${setHeaderHeight}px)`
+    mainElement.style.minHeight = `calc(100vh - ${setHeaderHeight}px)`
   } else {
     /** @type {HTMLElement} */
     const headerElement = headerEl.value
-    mainElement.style.height = `calc(100vh - ${headerElement.clientHeight}px)`
+    mainElement.style.minHeight = `calc(100vh - ${headerElement.clientHeight}px)`
   }
 }
 
@@ -184,6 +185,10 @@ header {
       gap: 18px;
       position: relative;
 
+      button {
+        border-radius: 50%;
+      }
+
       & > div.search {
         display: flex;
         align-items: center;
@@ -309,6 +314,16 @@ left-menu {
 
   &.expanded {
     transform: translateX(0);
+  }
+
+  &:not(.expanded) {
+    & > a:focus {
+      position: absolute;
+      left: 100%;
+      background: rgba(217, 217, 217, 0.24);
+      backdrop-filter: blur(20px);
+
+    }
   }
 
   & > a {

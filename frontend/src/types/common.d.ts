@@ -25,7 +25,7 @@ export export interface GameModel {
 export type UserModel = {
     id: string;
     username: string;
-    email: string;
+    // email: string;
     games_rated: Record<string, number>;
     games_liked: string[];
     games_played: string[];

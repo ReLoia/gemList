@@ -181,9 +181,10 @@ onUnmounted(() => {
   width: 100%;
   height: 100%;
   max-width: 1400px;
-  margin: auto;
+  margin: auto auto 200px;
 
   padding-inline: 15px;
+
 
   & > .content {
     grid-area: content;

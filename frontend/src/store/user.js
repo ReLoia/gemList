@@ -4,9 +4,12 @@ import {BackendApiService} from "../api/backend.ts";
 export const useUserStore = defineStore('user', {
     state: () => {
         return {
+            id: null,
             username: '',
             avatar: 'https://api.dicebear.com/9.x/adventurer/png?backgroundColor=b6e3f4,c0aede,d1d4f9',
-            token: ''
+            games_rated: [],
+            games_played: [],
+            games_liked: [],
         }
     },
     actions: {
@@ -16,7 +19,6 @@ export const useUserStore = defineStore('user', {
         },
         async loadUser(token) {
             if (!token) return;
-            this.token = token;
             localStorage.setItem('access_token', token);
             const api = new BackendApiService();
             api.setToken(token);
@@ -28,8 +30,6 @@ export const useUserStore = defineStore('user', {
             } catch (e) {
                 console.log(e)
             }
-
-            // ap
         }
     }
 
