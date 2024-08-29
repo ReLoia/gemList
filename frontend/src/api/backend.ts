@@ -35,6 +35,20 @@ export class BackendApiService {
         return response.json();
     }
 
+
+    // POST /games/get
+    async getGamesFromIds(ids: string[]): Promise<GameModel[]> {
+        const response = await fetch(`${this.baseUrl}/games/get`, {
+            method: "POST",
+            headers: this.getHeaders(),
+            body: JSON.stringify(ids),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch games");
+        }
+        return response.json();
+    }
+
     // GET /games/{game_id}
     async getGame(gameId: string): Promise<GameModel> {
         const response = await fetch(`${this.baseUrl}/games/${gameId}`, {
