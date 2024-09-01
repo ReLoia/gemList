@@ -1,3 +1,5 @@
+import os
+
 from bson import ObjectId
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.responses import RedirectResponse
@@ -18,10 +20,13 @@ origins = [
     "https://gem-list.vercel.app"
 ]
 
+BASE_PATH = os.environ.get("API_ROOT_PATH", "")
+
 app = FastAPI(
     title="GemList API",
     description="API for gemList",
-    version="1.0"
+    version="1.0",
+    root_path=BASE_PATH
 )
 load_dotenv()
 app.add_middleware(
@@ -35,7 +40,7 @@ app.add_middleware(
 
 @app.get("/")
 async def root():
-    return RedirectResponse(url="/docs")
+    return RedirectResponse(url=f"{BASE_PATH}/docs")
 
 
 @app.get("/games",
