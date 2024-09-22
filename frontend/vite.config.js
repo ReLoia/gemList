@@ -20,10 +20,10 @@ export default defineConfig({
         }
     },
     server: {
+        base: process.env.ROOT_PATH || '/',
         proxy: {
             '/api': {
-                // TODO: change to backend url
-                target: 'https://4431-129-152-6-232.ngrok-free.app/',
+                target: 'https://reloia.ddns.net/gemlist/api/',
                 changeOrigin: true,
                 rewrite: path => path.replace(/^\/api/, '')
             }
