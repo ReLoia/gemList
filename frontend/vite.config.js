@@ -23,7 +23,7 @@ export default defineConfig({
         base: process.env.ROOT_PATH || '/',
         proxy: {
             '/api': {
-                target: 'https://vercel-proxy-alpha-three.vercel.app/gemlist/api/',
+                target: 'https://reloia.ddns.net/gemlist/api/',
                 changeOrigin: true,
                 rewrite: path => path.replace(/^\/api/, '')
             }
