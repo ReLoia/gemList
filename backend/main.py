@@ -17,7 +17,8 @@ import motor.motor_asyncio
 origins = [
     "http://localhost",
     "http://localhost:5173",
-    "https://gem-list.vercel.app"
+    "https://gem-list.vercel.app",
+    os.getenv("FRONTEND_URL", "")
 ]
 
 BASE_PATH = os.environ.get("API_ROOT_PATH", "")

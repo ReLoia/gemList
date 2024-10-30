@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8104"
+    environment:
+      jwt_secret: 'peppebrescia'
+      API_ROOT_PATH:
+      FRONTEND_URL:
+      MONGO_USER:
+      MONGO_PASSWORD:
+      MONGO_HOST:
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8104"
+    environment:
+      ROOT_PATH:
+      HOST_URL: http://localhost:8001
+      API_ROOT_PATH: ${API_ROOT_PATH}

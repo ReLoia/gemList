@@ -49,6 +49,8 @@ const app = createApp(App)
 router.beforeEach(async (to, from, next) => {
     if (to.meta.title) {
         document.title = to.meta.title + ' - gemList'
+    } else {
+        document.title = 'gemList'
     }
 
     const token = localStorage.getItem('access_token')

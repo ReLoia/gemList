@@ -2,7 +2,7 @@
 from passlib.context import CryptContext
 import motor.motor_asyncio
 
-from ..models import UserEntity
+from backend.database.models import UserEntity
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

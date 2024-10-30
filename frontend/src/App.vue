@@ -1,4 +1,5 @@
 <script setup>
+
 import '@jamescoyle/svg-icon'
 import {mdiMenu, mdiClose, mdiMagnify, mdiCog} from "@mdi/js";
 
@@ -48,15 +49,6 @@ onMounted(calculateMainHeight)
 
 <template>
   <LoadingBar v-if="headerStore.loading"/>
-  <div class="popup-disclaimer">
-    <!--  Disclaimer that says that the website is not finished and that the backend is done but I don't know a free place to host it on. Also the website is not done for mobile phones currently  -->
-    <p>This website is not finished yet. The backend is done but I don't know a free place to host it on. Also the
-      website is not done for mobile phones currently.</p>
-    <p>This popup does not have pointer events enabled, so you can interact with the website.</p>
-    <br>
-    <br>
-    <p>If you want to collaborate, please contact me on github </p>
-  </div>
   <header :class="{ expanded: headerStore.expanded, menuOpen: menuState }" ref="headerEl"
           :style="{'--backgroundImage': headerStore.backgroundImage}">
     <div class="content">
@@ -257,6 +249,7 @@ header {
 
     color: #fff;
 
+    /* background */
     &:after {
       position: absolute;
       top: 0;
