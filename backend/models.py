@@ -3,37 +3,31 @@ from typing import Union
 from pydantic import BaseModel
 
 
-class ExternalLink(BaseModel):
-    url: str
-    img_url: str
-
-
-class GameStats(BaseModel):
-    ratings: list[int]
-    likes: int
-
-
-class GameCommonMeta(BaseModel):
-    genres: str
-    platforms: str
-    releaseYear: str
-    developer: str
-    publisher: str
-
-
 class GameModel(BaseModel):
     id: str
     title: str
     image: str
     description: str
-    externalLinks: list[ExternalLink]
-    stats: GameStats
-    meta: Union[GameCommonMeta, dict]
+    external_links: dict
+    stats: dict
+    meta: dict
+    release_year: int
+    likes: int
+
+
+class NewGameModel(BaseModel):
+    title: str
+    image: str
+    description: str
+    external_links: dict
+    stats: dict
+    meta: dict
+    release_year: int
 
 
 class UserModel(BaseModel):
     username: str
     profile_pic: str
     games_liked: list[str]
-    games_rated: dict[str, int]
+    games_rated: dict[str, int]  # game_id: rating
     games_played: list[str]

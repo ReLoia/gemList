@@ -1,6 +1,5 @@
-# Methods for authentication
 from passlib.context import CryptContext
-import motor.motor_asyncio
+from sqlalchemy.orm import Session
 
 from backend.database.models import UserEntity
 
@@ -15,14 +14,12 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def get_user(db: motor.motor_asyncio.AsyncIOMotorDatabase, username: str):
+def get_user(db: Session, username: str):
     return db.query(UserEntity).filter(UserEntity.username == username).first()
 
 
-def authenticate_user(db: motor.motor_asyncio.AsyncIOMotorDatabase, username: str, password: str):
+def authenticate_user(db: Session, username: str, password: str):
     user = get_user(db, username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
+    if not user or not verify_password(password, user.password_hash):
         return False
     return user
