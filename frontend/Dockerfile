@@ -9,10 +9,6 @@ RUN npm install
 
 COPY . /app
 
-RUN npm run build
+EXPOSE 5173
 
-RUN npm install -g serve
-
-EXPOSE 8104
-
-CMD ["serve", "-s", "build", "-l", "8104"]
+CMD ["npm", "run", "dev"]

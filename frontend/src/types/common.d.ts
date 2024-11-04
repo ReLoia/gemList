@@ -3,14 +3,14 @@ export export interface GameModel {
     title: string
     image: string
     description: string
-    externalLinks: {
+    external_links: {
         url: string
         img_url: string
     }[]
     // The local stats of the game - in the database - this depends on the users of the website
     stats: {
         likes: number
-        ratings: number[]
+        ratings: number[],
     },
     // The global stats of the game - from the API
     meta: {
