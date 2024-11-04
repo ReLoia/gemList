@@ -16,40 +16,9 @@ const header = useHeaderStore()
 
 const gameID: string = Array.isArray(route.params.id) ? route.params.id[0] : route.params.id;
 
-// TODO: remove placeholder data
-const game = ref<GameModel>({
-      image: "https://steamcdn-a.akamaihd.net/steam/apps/292030/header.jpg?t=1631046447",
-      id: '66cdb5a1055b02fda758c0f6',
-      title: 'The Witcher 3: Wild Hunt',
-      description: 'The Witcher 3: Wild Hunt is a 2015 action role-playing game developed and published by CD Projekt. Based on The Witcher series of fantasy novels by Andrzej Sapkowski, it is the sequel to the 2011 game The Witcher 2: Assassins of Kings. Played in an open world with a third-person perspective, players control protagonist Geralt of Rivia, a monster hunter known as a witcher, who is looking for his missing adopted daughter on the run from the Wild Hunt: an otherworldly force determined to capture and use her powers.',
-      externalLinks: [{
-        url: 'http://localhost:8080',
-        img_url: 'https://via.placeholder.com/150'
-      }, {url: 'http://localhost:8080', img_url: 'https://via.placeholder.com/150'},],
-      stats: {likes: 0, ratings: [1, 1, 14, 61, 1, 1, 1, 1, 1, 150]},
-      meta: {
-        platforms: 'Windows, Linux, Mac',
-        releaseYear: '2021',
-        genres: 'Action, Adventure',
-        developer: 'Ubisoft',
-        publisher: 'Ubisoft',
-      }
-    }
-);
-// TODO: remove placeholder data
-header.setContent({
-  component: gamePageHeader,
-  props: {
-    id: game.value.id,
-    title: game.value.title,
-    description: game.value.description,
-    image: game.value.image,
-  }
-});
-header.setBackgroundImage(`url(${game.value.image})`);
+const game = ref<GameModel>();
 
-// TODO: remove placeholder data
-const totalRatings = ref(game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0));
+const totalRatings = ref();
 const error = ref<string | null>(null);
 
 const api = new BackendApiService()
@@ -60,7 +29,7 @@ onMounted(async () => {
 
   try {
     game.value = await api.getGame(gameID);
-    totalRatings.value = game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0);
+    totalRatings.value = game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0) + 1;
 
     header.setContent({
       component: gamePageHeader,
@@ -94,7 +63,7 @@ onUnmounted(() => {
       <section class="external-links">
         <!--   list of external links related to the game     -->
         <!--  wikipedia, epic games, gog, ubisoft, steam      -->
-        <ExternalLinkItem v-for="link in game.externalLinks" :key="link.url" :url="link.url" :img_url="link.img_url"/>
+        <ExternalLinkItem v-for="link in game.external_links" :key="link.url" :url="link.url" :img_url="link.img_url"/>
 
       </section>
       <section class="related">
@@ -141,8 +110,10 @@ onUnmounted(() => {
       <!--   stats is a grid that contains "widgets" - div that are N cols of width and that have rounded corners and dark background   -->
       <div class="stats">
         <div class="widget ratings">
+          Ratings
           <ul>
             <li v-for="number in Array.from({length: 10}, (_, i) => i + 1)"
+
                 :style="{ '--percentage': `${game.stats.ratings[number-1] / totalRatings * 100}%` }">
               <span>{{ number }}</span> <span>{{
                 Math.round(game.stats.ratings[number - 1] / totalRatings * 100)
