@@ -31,7 +31,8 @@ export const useUserStore = defineStore('user', {
                 user = await api.getUser();
                 this.setUser(user);
             } catch (e) {
-                console.log(e)
+                // console.log(e)
+                localStorage.removeItem('access_token');
             }
         }
     }

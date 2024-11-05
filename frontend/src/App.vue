@@ -106,35 +106,6 @@ onMounted(calculateMainHeight)
 </template>
 
 <style scoped>
-/* TODO: remove disclaimer data */
-.popup-disclaimer {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  border-radius: 12px;
-
-  pointer-events: none;
-
-  background-color: rgba(0, 0, 0, 0.3);
-  color: #b20000;
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  padding: 10px 0;
-  justify-content: center;
-  align-items: center;
-
-  z-index: 1000;
-
-
-  & > p {
-    max-width: 80%;
-    text-align: center;
-  }
-}
-
 header {
   background-color: rgba(217, 217, 217, 0.12);
   color: #000;
