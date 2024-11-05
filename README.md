@@ -11,6 +11,11 @@ I also wanted to have a place where I could write reviews about the games I have
 
 There was no website that I could find that had all these features, so I decided to create my own.
 
+## Contact - Suggestions
+
+Please use Github's issue tracker to report any bugs  
+or suggest new features or hop into the [Discord server](https://discord.gg/WHBj6Ejx) to chat with me.
+
 ## License
 
-This project is licensed under the GPL3 License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the GPL3 License - see the [LICENSE](LICENSE) file for details.

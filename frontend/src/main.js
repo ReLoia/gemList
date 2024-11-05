@@ -11,7 +11,7 @@ String.prototype.capitalize = function () {
 }
 
 const routes = [
-    {path: '/', component: () => import('./components/home/Home.vue'), meta: {title: 'Home'}},
+    {path: '/', component: () => import('./components/FutureFeature/FutureFeature.vue'), meta: {title: 'Home'}},
     {path: '/explore', component: () => import('./components/explore/Explore.vue'), meta: {title: 'Explore'}},
     {path: '/game/:id', component: () => import('./components/game/Game.vue')},
 
@@ -21,13 +21,13 @@ const routes = [
     {path: '/user/:id', component: () => import('./components/user/User.vue')},
 
     //     TODO: change the path to the correct components
-    {path: '/staff/:id', component: () => import('./components/404/NotFound.vue')},
-    {path: '/achievement/:id', component: () => import('./components/404/NotFound.vue')},
+    {path: '/staff/:id', component: () => import('./components/FutureFeature/FutureFeature.vue')},
+    {path: '/achievement/:id', component: () => import('./components/FutureFeature/FutureFeature.vue')},
 
-    {path: '/calendar', component: () => import('./components/404/NotFound.vue')},
-    {path: '/library', component: () => import('./components/404/NotFound.vue')},
-    {path: '/community', component: () => import('./components/404/NotFound.vue')},
-    {path: '/friends', component: () => import('./components/404/NotFound.vue')},
+    {path: '/calendar', component: () => import('./components/FutureFeature/FutureFeature.vue')},
+    {path: '/library', component: () => import('./components/FutureFeature/FutureFeature.vue')},
+    {path: '/community', component: () => import('./components/FutureFeature/FutureFeature.vue')},
+    {path: '/friends', component: () => import('./components/FutureFeature/FutureFeature.vue')},
 
     {path: '/:pathMatch(.*)*', component: () => import('./components/404/NotFound.vue')},
 ].map(route => {
