@@ -14,15 +14,3 @@ services:
       FRONTEND_URL:
     volumes:
       - /opt/gemlist/backend/:/app/data
-
-  frontend:
-    container_name: gemlist-frontend
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    ports:
-      - "8001:4173"
-    environment:
-      # the path of the frontend in nginx or other reverse proxies
-      ROOT_PATH:
-      BACKEND_URL: http://backend:8104
