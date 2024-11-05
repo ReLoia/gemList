@@ -137,6 +137,10 @@ header {
 
     z-index: 1;
 
+    @media (max-width: 768px) {
+      padding: 1rem 1rem;
+    }
+
     & > .title {
       font-weight: bold;
       letter-spacing: 4px;
@@ -167,6 +171,10 @@ header {
 
         padding: 8px;
         margin-right: -8px;
+
+        @media (max-width: 768px) {
+          display: none;
+        }
 
         &.expanded {
           background: #2F1212;

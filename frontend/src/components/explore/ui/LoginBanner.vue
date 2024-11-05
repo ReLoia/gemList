@@ -23,7 +23,7 @@
   text-align: center;
 
   width: fit-content;
-  max-width: 98%;
+  max-width: 94vw;
   padding: 16px 12px;
   border-radius: 12px;
   background: rgba(217, 217, 217, 0.12);
@@ -50,7 +50,7 @@
     margin-top: 24px;
 
     & > .button {
-      padding: 4px 48px;
+      padding: 4px 38px;
       border-radius: 8px;
 
       font-weight: bold;

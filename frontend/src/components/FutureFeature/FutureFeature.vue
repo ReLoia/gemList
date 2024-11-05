@@ -18,10 +18,21 @@ div {
 
 h1 {
   margin-top: 2rem;
-  font-size: 10rem;
+  font-size: 6rem;
 }
 
 span {
   font-size: 1.6rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 3rem;
+  }
+
+  span {
+    font-size: 1.4rem;
+  }
 }
 </style>

@@ -82,6 +82,18 @@ div.card {
 
   overflow: hidden;
 
+  @media (max-width: 768px) {
+    flex-direction: column;
+    max-width: 97vw;
+
+    & form {
+      border-left: none !important;
+      border-top: 1px solid #e0e0e0;
+
+      padding-block: 20px !important;
+    }
+  }
+
   & > * {
     width: 100%;
     height: 100%;
