@@ -1,7 +1,12 @@
 import {AuthResponse, GameModel, UserModel} from "../types/common";
 
+let ENV_BASE_URL: string = import.meta.env.BASE_URL;
+if (ENV_BASE_URL.endsWith("/"))
+    ENV_BASE_URL = ENV_BASE_URL.slice(0, -1);
+
+
 export class BackendApiService {
-    private baseUrl: string = "/api"
+    private baseUrl: string = ENV_BASE_URL + "/api"
     private token: string | null;
 
     constructor() {

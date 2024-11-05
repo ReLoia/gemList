@@ -19,9 +19,9 @@ export default defineConfig({
             '@': fileURLToPath(new URL('./src', import.meta.url))
         }
     },
+    base: process.env.ROOT_PATH || '/',
     server: {
         host: true,
-        base: process.env.ROOT_PATH || '/',
         proxy: {
             '/api': {
                 // target: 'https://reloia.ddns.net/gemlist/api/',

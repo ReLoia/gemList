@@ -9,6 +9,11 @@ RUN npm install
 
 COPY . /app
 
-EXPOSE 5173
+EXPOSE 4173
 
-CMD ["npm", "run", "dev"]
+#CMD ["npm", "run", "dev"]
+
+CMD /bin/sh -c "npm run build --base=/${BASE_URL}"
+
+CMD ["npm", "run", "preview"]
+
