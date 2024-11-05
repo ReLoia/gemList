@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 
 const isHovered = ref(false)
-const totalRatings = props.game.stats.ratings.reduce((acc, curr) => acc + curr, 0);
+const totalRatings = props.game.stats.ratings.reduce((acc, curr) => acc + curr, 0) + 1;
 </script>
 
 <template>
@@ -31,7 +31,7 @@ const totalRatings = props.game.stats.ratings.reduce((acc, curr) => acc + curr, 
           </span>
 
           <span class="likes">
-            <span>{{ game.stats.likes }}</span>
+            <span>{{ game.likes }}</span>
             <svg-icon type="mdi" :path="mdiHeart"/>
           </span>
         </p>

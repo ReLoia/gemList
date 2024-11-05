@@ -7,9 +7,9 @@ export export interface GameModel {
         url: string
         img_url: string
     }[]
+    likes: number
     // The local stats of the game - in the database - this depends on the users of the website
     stats: {
-        likes: number
         ratings: number[],
     },
     // The global stats of the game - from the API

@@ -15,7 +15,8 @@ const items = ref<GameModel[]>([])
 const api = new BackendApiService()
 
 try {
-  api.getGamesFromIds(props.items).then(res => items.value = res)
+  if (props.items.length > 0)
+    api.getGamesFromIds(props.items).then(res => items.value = res)
 } catch (e) {
   console.error(e)
 }
@@ -60,7 +61,7 @@ function scrollCarousel(direction: 'left' | 'right') {
   <section class="carousel">
     <span class="carousel-title">{{ title }}</span>
     <div class="container" v-if="items.length === 0">
-      <p>The list is empty</p>
+      <p>Your {{ title }} list is empty</p>
     </div>
     <div class="container" v-else>
       <button @click="scrollCarousel('left')" :class="{ disabled: !canScrollLeft }">

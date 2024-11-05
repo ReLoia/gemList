@@ -1,5 +1,6 @@
 services:
   backend:
+    container_name: gemlist-backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -8,18 +9,19 @@ services:
     environment:
       jwt_secret: 'peppebrescia'
       # the path of the backend in nginx or other reverse proxies
-      BASE_PATH:
+      ROOT_PATH:
       # the url of the frontend for CORS, where the requests are coming from - may be useless because of docker network
       FRONTEND_URL:
     volumes:
       - /opt/gemlist/backend/:/app/data
 
   frontend:
+    container_name: gemlist-frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "8001:5173"
+      - "8001:4173"
     environment:
       # the path of the frontend in nginx or other reverse proxies
       ROOT_PATH:
