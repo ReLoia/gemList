@@ -15,7 +15,8 @@ defineProps<{
 }>()
 
 const api = new BackendApiService();
-if (user.username) api.setToken(user.token);
+if (localStorage.getItem('access_token'))
+  api.setToken(localStorage.getItem('access_token') || '');
 
 function likeGame(id: string) {
   api.likeGame(id)
@@ -67,6 +68,11 @@ function addGame(id: string) {
   justify-content: space-between;
   flex: 1;
 
+  @media (max-width: 800px) {
+    width: 98%;
+    padding-inline: 10px;
+  }
+
   & > div.info {
     display: flex;
     flex-direction: row;
@@ -87,6 +93,22 @@ function addGame(id: string) {
       border-radius: 8px;
 
       position: relative;
+
+      @media (max-width: 800px) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 800px) {
+      & > div {
+        & > h1 {
+          font-size: 2rem;
+        }
+
+        & > p {
+          font-size: 1.05rem;
+        }
+      }
     }
   }
 

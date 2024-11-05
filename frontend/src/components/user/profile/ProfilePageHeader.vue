@@ -3,7 +3,8 @@ import {BackendApiService} from "../../../api/backend";
 
 defineProps<{
   username: string,
-  image: string
+  image: string,
+  creation_date: string
 }>()
 
 const api = new BackendApiService();
@@ -18,7 +19,7 @@ api.setToken(localStorage.getItem('access_token') || '');
       <div>
         <h1>{{ username }}</h1>
         <!--        TODO: add more meta -->
-        <p>Member since: </p>
+        <p>Member since: {{ new Date(creation_date).toLocaleDateString() }}</p>
       </div>
     </div>
   </div>

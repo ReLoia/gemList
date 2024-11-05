@@ -15,7 +15,8 @@ onMounted(() => {
     component: profilePageHeader,
     props: {
       username: user.username,
-      image: user.avatar
+      image: user.avatar,
+      creation_date: user.creation_date
     }
   });
   header.setBackgroundImage(`url(${user.avatar})`);

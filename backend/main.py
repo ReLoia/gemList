@@ -1,5 +1,6 @@
 import json
 import os
+from datetime import datetime
 
 from dotenv import load_dotenv
 from fastapi import FastAPI, Depends, HTTPException
@@ -12,7 +13,7 @@ from backend.database.auth.auth import verify_password, get_password_hash
 from backend.database.auth.security import get_user_from_token, create_access_token
 from backend.database.models import UserEntity, GameEntity
 from backend.database.session import get_db
-from backend.models import GameModel, UserModel, NewGameModel
+from backend.models import GameModel, UserModel, NewGameModel, NewPasswordModel
 
 origins = [
     "http://localhost",
@@ -38,6 +39,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 @app.get("/")
 async def root():
     return RedirectResponse(url=f"{ROOT_PATH}/docs")
@@ -57,6 +59,7 @@ async def get_games(
 
     return [game.to_game_model().model_dump() for game in games]
 
+
 @app.get("/games/{game_id}", response_model=GameModel)
 async def get_game(
         game_id: int,
@@ -67,36 +70,6 @@ async def get_game(
         raise HTTPException(status_code=404, detail="Game not found")
     return game.to_game_model().model_dump()
 
-
-# TODO: remove
-@app.post("/games", response_model=GameModel)
-async def add_game(
-        game: NewGameModel,
-        user: UserEntity = Depends(get_user_from_token),
-        db: Session = Depends(get_db)
-):
-    if not user:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
-    if not user.username == "reloia":
-        raise HTTPException(status_code=403, detail="Not authorized")
-
-    if "ratings" not in game.stats:
-        game.stats["ratings"] = [0] * 10
-
-    new_game = GameEntity(
-        title=game.title,
-        image=game.image,
-        description=game.description,
-        external_links=json.dumps(game.external_links),
-        stats=json.dumps(game.stats),
-        meta=json.dumps(game.meta),
-        release_year=game.release_year,
-        likes=0
-    )
-    db.add(new_game)
-    db.commit()
-    return new_game.to_game_model().model_dump()
 
 @app.post("/games/{game_id}/rate")
 async def rate_game(
@@ -131,6 +104,7 @@ async def rate_game(
     db.commit()
     return {"message": "Rating updated"}
 
+
 @app.post("/games/{game_id}/like")
 async def like_game(
         game_id: int,
@@ -162,6 +136,41 @@ async def get_games_from_ids(
     games = db.query(GameEntity).filter(GameEntity.id.in_(game_ids)).all()
     return [game.to_game_model().model_dump() for game in games]
 
+
+# TODO: remove
+@app.post("/games", response_model=GameModel, status_code=201)
+async def add_game(
+        game: NewGameModel,
+        user: UserEntity = Depends(get_user_from_token),
+        db: Session = Depends(get_db)
+):
+    if not user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+
+    if not user.username == "reloia":
+        raise HTTPException(status_code=403, detail="Forbidden")
+
+    if "ratings" not in game.stats:
+        game.stats["ratings"] = [0] * 10
+
+    new_game = GameEntity(
+        title=game.title,
+        image=game.image,
+        description=game.description,
+        external_links=json.dumps(game.external_links),
+        stats=json.dumps(game.stats),
+        meta=json.dumps(game.meta),
+        release_year=game.release_year,
+        likes=0
+    )
+    db.add(new_game)
+    db.commit()
+    return new_game.to_game_model().model_dump()
+
+
+# Auth
+
+
 @app.post("/login")
 async def login(
         form_data: OAuth2PasswordRequestForm = Depends(),
@@ -174,6 +183,7 @@ async def login(
     access_token = create_access_token(data={"sub": user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
+
 @app.post("/register")
 async def register(
         form_data: OAuth2PasswordRequestForm = Depends(),
@@ -181,11 +191,12 @@ async def register(
 ):
     user = UserEntity.get_user(db, form_data.username)
     if user:
-        raise HTTPException(status_code=400, detail="User already exists")
+        raise HTTPException(status_code=409, detail="User already exists")
 
     new_user = UserEntity(
         username=form_data.username,
         password_hash=get_password_hash(form_data.password),
+        creation_date=datetime.now(),
         profile_pic="",
         games_rated="{}"
     )
@@ -195,8 +206,24 @@ async def register(
     access_token = create_access_token(data={"sub": new_user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
+
 @app.get("/users/me", response_model=UserModel)
 async def get_user(
         user: UserEntity = Depends(get_user_from_token)
 ):
     return user.to_user_model().model_dump()
+
+
+@app.post("/users/me/change-password")
+async def change_password(
+        new_data: NewPasswordModel,
+        user: UserEntity = Depends(get_user_from_token),
+        db: Session = Depends(get_db)
+):
+    if not verify_password(new_data.old_password, user.password_hash):
+        raise HTTPException(status_code=401, detail="Incorrect password")
+
+    user.password_hash = get_password_hash(new_data.new_password)
+
+    db.commit()
+    return {"message": "Password changed"}

@@ -156,7 +156,6 @@ onUnmounted(() => {
 
   padding-inline: 15px;
 
-
   & > .content {
     grid-area: content;
 

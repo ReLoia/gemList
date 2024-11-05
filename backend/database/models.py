@@ -1,7 +1,7 @@
 import json
 
 import sqlalchemy
-from sqlalchemy import create_engine, Column, Integer, String, Table
+from sqlalchemy import create_engine, Column, Integer, String, Table, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -24,12 +24,6 @@ games_liked = Table(
     Column("game_id", Integer, sqlalchemy.ForeignKey("games.id"), primary_key=True)
 )
 
-games_rated = Table(
-    "games_rated",
-    Base.metadata,
-    Column("user_id", Integer, sqlalchemy.ForeignKey("users.id"), primary_key=True),
-    Column("game_id", Integer, sqlalchemy.ForeignKey("games.id"), primary_key=True)
-)
 
 games_played = Table(
     "games_played",
@@ -76,6 +70,7 @@ class UserEntity(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, unique=True, index=True)
     password_hash = Column(String)
+    creation_date = Column(DateTime)
     profile_pic = Column(String)
     games_liked = relationship("GameEntity", secondary=games_liked)
     games_rated = Column(String)  # Stored as JSON
@@ -86,11 +81,11 @@ class UserEntity(Base):
         return db.query(UserEntity).filter(UserEntity.username == username).first()
 
     def to_user_model(self):
-        print(self.games_rated)
         return UserModel(
             id=self.id,
             username=self.username,
             profile_pic=self.profile_pic,
+            creation_date=self.creation_date,
             games_liked=[str(game.id) for game in self.games_liked],
             games_rated=json.loads(self.games_rated),
             games_played=[str(game.id) for game in self.games_played]
