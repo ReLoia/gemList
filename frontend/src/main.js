@@ -58,8 +58,6 @@ router.beforeEach(async (to, from, next) => {
 
     const userStore = useUserStore();
 
-    console.log(to.matched.some(record => record.meta.requiresAuth), userIsLogged)
-
     if (to.matched.some(record => record.meta.requiresAuth) && !userIsLogged) {
         next('/login?redirect=' + to.fullPath)
         return;

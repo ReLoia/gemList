@@ -8,7 +8,7 @@ class GameModel(BaseModel):
     title: str
     image: str
     description: str
-    external_links: dict
+    external_links: list[dict]
     stats: dict
     meta: dict
     release_year: int
@@ -19,7 +19,7 @@ class NewGameModel(BaseModel):
     title: str
     image: str
     description: str
-    external_links: dict
+    external_links: list[dict]
     stats: dict
     meta: dict
     release_year: int

@@ -12,10 +12,10 @@ export export interface GameModel {
     stats: {
         ratings: number[],
     },
+    release_year: number
     // The global stats of the game - from the API
     meta: {
         platforms: string
-        releaseYear: string
         genres: string
         developer: string
         publisher: string
