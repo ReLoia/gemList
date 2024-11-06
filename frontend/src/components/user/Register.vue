@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import {onMounted, onUnmounted} from "vue";
-import {BackendApiService} from "../../api/backend.js";
+import {onMounted, onUnmounted, ref} from "vue";
+import {APIError, BackendApiService} from "../../api/backend.js";
 import {useRouter} from "vue-router";
 
 const api = new BackendApiService()
 const router = useRouter()
+
+const error = ref("");
 
 async function register(event: SubmitEvent) {
   event.preventDefault()
@@ -19,7 +21,10 @@ async function register(event: SubmitEvent) {
       await router.push('/')
     }
   } catch (e) {
-    console.error(e)
+    if (e instanceof APIError)
+      error.value = e.message
+    else
+      console.error(e, e.message)
   }
 }
 
@@ -39,6 +44,8 @@ onUnmounted(() => {
       <h2>Register</h2>
 
       <p>Register an account to start tracking and rating your games! <br> <br> Rate games, write reviews and more!
+        <br>
+        <b class="error">{{ error }}</b>
       </p>
 
       <p class="login">Already have an account?
@@ -112,6 +119,13 @@ div.card {
       & > p:not(.login) {
         font-size: 1.15rem;
         max-width: 300px;
+
+        & > .error {
+          color: red;
+          min-height: 1ch;
+          display: block;
+          margin-top: 10px;
+        }
       }
 
       padding: 20px;

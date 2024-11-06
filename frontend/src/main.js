@@ -54,9 +54,11 @@ router.beforeEach(async (to, from, next) => {
     }
 
     const token = localStorage.getItem('access_token')
-    const userIsLogged = token !== null;
+    const userIsLogged = token !== null && token !== "";
 
     const userStore = useUserStore();
+
+    console.log(to.matched.some(record => record.meta.requiresAuth), userIsLogged)
 
     if (to.matched.some(record => record.meta.requiresAuth) && !userIsLogged) {
         next('/login?redirect=' + to.fullPath)

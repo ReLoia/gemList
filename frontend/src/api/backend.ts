@@ -4,6 +4,13 @@ let ENV_BASE_URL: string = import.meta.env.BASE_URL;
 if (ENV_BASE_URL.endsWith("/"))
     ENV_BASE_URL = ENV_BASE_URL.slice(0, -1);
 
+export class APIError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "APIError";
+    }
+}
+
 
 export class BackendApiService {
     private baseUrl: string = ENV_BASE_URL + "/api"
@@ -100,7 +107,13 @@ export class BackendApiService {
             body: `username=${username}&password=${password}`,
         });
         if (!response.ok) {
-            throw new Error("Login failed");
+            let data: any;
+            try {
+                data = await response.json();
+            } catch (e) {
+                throw new Error("Login failed");
+            }
+            throw new APIError(data.detail);
         }
         const data = await response.json();
         this.setToken(data.access_token);
@@ -115,7 +128,13 @@ export class BackendApiService {
             body: `username=${username}&password=${password}`,
         });
         if (!response.ok) {
-            throw new Error("Registration failed");
+            let data: any;
+            try {
+                data = await response.json();
+            } catch (e) {
+                throw new Error("Registration failed");
+            }
+            throw new APIError(data.detail);
         }
         const data = await response.json();
         this.setToken(data.access_token);

@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import {onMounted, onUnmounted} from "vue";
-import {BackendApiService} from "../../api/backend.js";
+import {onMounted, onUnmounted, ref} from "vue";
+import {APIError, BackendApiService} from "../../api/backend.js";
 import {useRouter} from "vue-router";
 
 const api = new BackendApiService()
 const router = useRouter()
+
+const error = ref("");
 
 const redirect = new URLSearchParams(location.search).get('redirect')
 
@@ -21,7 +23,10 @@ async function login(event: SubmitEvent) {
       await router.push(redirect || '/')
     }
   } catch (e) {
-    console.error(e)
+    if (e instanceof APIError)
+      error.value = e.message
+    else
+      console.error(e, e.message)
   }
 }
 
@@ -41,6 +46,8 @@ onUnmounted(() => {
       <h2>Login</h2>
 
       <p>Access your account and continue tracking and rating your games! <br> <br> Rate games, write reviews and more!
+        <br>
+        <b class="error">{{ error }}</b>
       </p>
 
       <p class="register">Don't have an account?
@@ -114,6 +121,13 @@ div.card {
       & > p:not(.register) {
         font-size: 1.15rem;
         max-width: 300px;
+
+        & > .error {
+          color: red;
+          min-height: 1ch;
+          display: block;
+          margin-top: 10px;
+        }
       }
 
       padding: 20px;
