@@ -81,23 +81,20 @@ async def rate_game(
     if rating not in range(1, 11) or not isinstance(rating, int):
         raise HTTPException(status_code=400, detail="Rating must be an integer between 1 and 10")
 
-    game = db.query(GameEntity).get(game_id)
+    game: GameEntity = db.query(GameEntity).get(game_id)
     if not game:
         raise HTTPException(status_code=404, detail="Game not found")
 
     user_rating = user.to_user_model().games_rated.get(str(game_id))
 
-    game_stats_parsed = json.loads(game.stats)
-
-    if "ratings" not in game_stats_parsed:
-        game_stats_parsed["ratings"] = [0] * 10
+    game_ratings_parsed = json.loads(game.ratings)
 
     if user_rating:
-        game_stats_parsed["ratings"][user_rating - 1] -= 1
+        game_ratings_parsed[user_rating - 1] -= 1
 
-    game_stats_parsed["ratings"][rating - 1] += 1
+    game_ratings_parsed[rating - 1] += 1
 
-    game.stats = json.dumps(game_stats_parsed)
+    game.ratings = json.dumps(game_ratings_parsed)
 
     user.rate_game(game_id, rating)
 
@@ -150,18 +147,20 @@ async def add_game(
     if not user.username == "reloia":
         raise HTTPException(status_code=403, detail="Forbidden")
 
-    if "ratings" not in game.stats:
-        game.stats["ratings"] = [0] * 10
-
     new_game = GameEntity(
         title=game.title,
-        image=game.image,
         description=game.description,
-        external_links=json.dumps(game.external_links),
-        stats=json.dumps(game.stats),
-        meta=json.dumps(game.meta),
+        cover_image_url=game.cover_image_url,
         release_year=game.release_year,
-        likes=0
+        external_links=json.dumps(list(map(lambda x: x.model_dump(), game.external_links))),
+        genres=json.dumps(game.genres),
+        developer=game.developer,
+        publisher=game.publisher,
+        platforms=json.dumps(game.platforms),
+        rating_esrb=game.rating_esrb,
+        trailer_url=game.trailer_url,
+        likes=0,
+        ratings=json.dumps([0] * 10)
     )
     db.add(new_game)
     db.commit()

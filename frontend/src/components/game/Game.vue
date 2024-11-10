@@ -29,7 +29,7 @@ onMounted(async () => {
 
   try {
     game.value = await api.getGame(gameID);
-    totalRatings.value = game.value.stats.ratings.reduce((acc, curr) => acc + curr, 0) + 1;
+    totalRatings.value = game.value.ratings.reduce((acc, curr) => acc + curr, 0.000001);
 
     header.setContent({
       component: gamePageHeader,
@@ -37,10 +37,10 @@ onMounted(async () => {
         id: game.value.id,
         title: game.value.title,
         description: game.value.description,
-        image: game.value.image,
+        image: game.value.cover_image_url,
       }
     })
-    header.setBackgroundImage(`url(${game.value.image})`);
+    header.setBackgroundImage(`url(${game.value.cover_image_url})`);
   } catch (e) {
     error.value = e.message;
   } finally {
@@ -114,9 +114,9 @@ onUnmounted(() => {
           <ul>
             <li v-for="number in Array.from({length: 10}, (_, i) => i + 1)"
 
-                :style="{ '--percentage': `${game.stats.ratings[number-1] / totalRatings * 100}%` }">
+                :style="{ '--percentage': `${game.ratings[number-1] / totalRatings * 100}%` }">
               <span>{{ number }}</span> <span>{{
-                Math.round(game.stats.ratings[number - 1] / totalRatings * 100)
+                Math.round(game.ratings[number - 1] / totalRatings * 100)
               }}%</span>
             </li>
           </ul>
@@ -129,13 +129,8 @@ onUnmounted(() => {
       <div class="meta">
         <span class="name">Average Rating</span>
         <span class="value">{{
-            (game.stats.ratings.reduce((acc, curr, i) => acc + curr * (i + 1), 0) / totalRatings).toFixed(2)
+            (game.ratings.reduce((acc, curr, i) => acc + curr * (i + 1), 0.000001) / totalRatings).toFixed(2)
           }}</span>
-      </div>
-      <!--   TODO: add more metadata about the game   -->
-      <div class="meta" v-for="item in Object.entries(game.meta)" :key="item[0]">
-        <span class="name">{{ item[0].capitalize() }}</span>
-        <span class="value">{{ item[1] }}</span>
       </div>
 
     </div>

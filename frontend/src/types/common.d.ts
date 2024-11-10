@@ -1,25 +1,22 @@
 export export interface GameModel {
     id: string
     title: string
-    image: string
     description: string
+    cover_image_url: string
+    release_year: number
     external_links: {
         url: string
         img_url: string
     }[]
+    genres: string[]
+    developer: string
+    publisher: string
+    platforms: string[]
+    rating_esrb: string
+    trailer_url: string
     likes: number
-    // The local stats of the game - in the database - this depends on the users of the website
-    stats: {
-        ratings: number[],
-    },
-    release_year: number
-    // The global stats of the game - from the API
-    meta: {
-        platforms: string
-        genres: string
-        developer: string
-        publisher: string
-    } | any
+    // len 10 array of times for each rating from 1 to 10
+    ratings: number[]
 }
 
 export type UserModel = {

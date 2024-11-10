@@ -38,13 +38,18 @@ class GameEntity(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String)
-    image = Column(String)
     description = Column(String)
-    external_links = Column(String)  # Stored as JSON
-    stats = Column(String)  # Stored as JSON
-    meta = Column(String)  # Stored as JSON
+    cover_image_url = Column(String)
     release_year = Column(Integer)
+    external_links = Column(String)  # Stored as JSON
+    genres = Column(String)  # Stored as JSON
+    developer = Column(String)
+    publisher = Column(String)
+    platforms = Column(String)  # Stored as JSON
+    rating_esrb = Column(String)
+    trailer_url = Column(String)
     likes = Column(Integer)
+    ratings = Column(String)  # Stored as JSON
 
     @staticmethod
     def get_game(db, game_id: int):
@@ -54,13 +59,18 @@ class GameEntity(Base):
         return GameModel(
             id=str(self.id),
             title=self.title,
-            image=self.image,
             description=self.description,
-            external_links=json.loads(self.external_links),
-            stats=json.loads(self.stats),
-            meta=json.loads(self.meta),
+            cover_image_url=self.cover_image_url,
             release_year=self.release_year,
-            likes=self.likes
+            external_links=json.loads(self.external_links),
+            genres=json.loads(self.genres),
+            developer=self.developer,
+            publisher=self.publisher,
+            platforms=json.loads(self.platforms),
+            rating_esrb=self.rating_esrb,
+            trailer_url=self.trailer_url,
+            likes=self.likes,
+            ratings=json.loads(self.ratings)
         )
 
 

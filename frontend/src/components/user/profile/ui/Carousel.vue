@@ -160,6 +160,10 @@ function scrollCarousel(direction: 'left' | 'right') {
       margin-top: -20px;
       margin-bottom: -280px;
 
+      @media (max-width: 600px) {
+        padding-inline: 14px 300px;
+      }
+
     }
   }
 }

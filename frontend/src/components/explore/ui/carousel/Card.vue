@@ -9,7 +9,7 @@ const props = defineProps<{
 }>()
 
 const isHovered = ref(false)
-const totalRatings = props.game.stats.ratings.reduce((acc, curr) => acc + curr, 0) + 1;
+const totalRatings = props.game.ratings.reduce((acc, curr) => acc + curr, 0.000001);
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const totalRatings = props.game.stats.ratings.reduce((acc, curr) => acc + curr, 
     <div>
       <div class="card-preview">
         <router-link :to="{ name: 'game', params: { id: game.id } }"/>
-        <img :src="game.image" alt="Game Image"/>
+        <img :src="game.cover_image_url" alt="Game Image"/>
       </div>
       <article class="card-content" v-if="isHovered">
         <h3>{{ game.title }}</h3>
@@ -25,7 +25,7 @@ const totalRatings = props.game.stats.ratings.reduce((acc, curr) => acc + curr, 
         <p class="metadata">
           <span class="rating">
             <span>{{
-                (game.stats.ratings.reduce((acc, curr, i) => acc + curr * (i + 1), 0) / totalRatings).toFixed(2)
+                (game.ratings.reduce((acc, curr, i) => acc + curr * (i + 1), 0.000001) / totalRatings).toFixed(2)
               }}</span>
             <svg-icon type="mdi" :path="mdiStar"/>
           </span>

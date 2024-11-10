@@ -35,7 +35,7 @@ onUnmounted(() => {
     <div class="content">
       <Carousel title="Games Played" :items="user.games_played"/>
       <Carousel title="Games Liked" :items="user.games_liked"/>
-      <Carousel title="Games Rated" :items="user.games_rated"/>
+      <Carousel title="Games Rated" :items="Object.keys(user.games_rated)"/>
       <Carousel title="Reviews" :items="[]"/>
     </div>
     <!--    TODO: add metadata -->
