@@ -23,6 +23,8 @@ const headerEl = ref(null)
 const mainEl = ref(null)
 const footerEl = ref(null)
 
+const settingsOpen = ref(false)
+
 function calculateMainHeight(setHeaderHeight) {
 //   calculate the main height and put it in CSS
 //   100svh - header height - footer height
@@ -83,9 +85,15 @@ onMounted(calculateMainHeight)
         })">
           <img :src="user.avatar || ''" alt="User Avatar"/>
         </button>
-        <a tabindex="0" class="has-icon button" style="scale: 1.3; display: inline-block">
+        <a tabindex="0" class="has-icon button settings-button" :class="{ open: settingsOpen }"
+           style="scale: 1.3; display: inline-block" @click="settingsOpen = !settingsOpen">
           <svg-icon type="mdi" :path="mdiCog"/>
         </a>
+        <div class="settings" :class="{ open: settingsOpen }">
+          <router-link to="/settings">Settings</router-link>
+          <divider></divider>
+          <router-link to="/logout">Logout</router-link>
+        </div>
       </div>
     </div>
     <component :is="headerStore.content.component" v-if="headerStore.expanded" v-bind="headerStore.content.props"/>
@@ -212,6 +220,66 @@ header {
           height: 34px;
         }
       }
+
+      & > .settings-button {
+        z-index: 11;
+
+        &.open {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 50%;
+
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+          transform: rotate(90deg);
+        }
+
+        transition: .2s transform;
+      }
+
+      & > .settings {
+        display: none;
+        position: absolute;
+        top: -4px;
+        right: -8px;
+        //left: 50%;
+        //transform: translateX(-50%);
+        background: rgba(47, 18, 18, 0.9);
+        border-radius: 8px;
+        padding: 42px 8px 8px;
+
+        gap: 4px;
+        flex-direction: column;
+        z-index: 10;
+
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+        &.open {
+          display: flex;
+        }
+
+        & > divider {
+          margin: 4px 0;
+          background: radial-gradient(circle, rgba(0, 0, 0, .6), rgba(0, 0, 0, 0.2));
+          height: 1px;
+        }
+
+        & > a {
+          color: #fff;
+          text-decoration: none;
+          font-size: 1rem;
+          font-weight: bold;
+          padding: 2px 8px;
+          border-radius: 8px;
+
+          margin-right: 36px;
+
+          width: 150px;
+
+          &:hover {
+            background: rgba(255, 255, 255, 0.1);
+          }
+        }
+      }
+      
     }
   }
 
