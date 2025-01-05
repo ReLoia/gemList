@@ -5,9 +5,9 @@ import {mdiMenu, mdiClose, mdiMagnify, mdiCog} from "@mdi/js";
 
 import {onMounted, ref, watch} from "vue";
 
-import {useUserStore} from "./store/user.js";
-import {useHeaderStore} from "./store/header.js";
-import LoadingBar from "./components/common/LoadingBar.vue";
+import {useUserStore} from "@/store/user.js";
+import {useHeaderStore} from "@/store/header.js";
+import LoadingBar from "@/components/common/LoadingBar.vue";
 
 import {useRouter} from "vue-router";
 

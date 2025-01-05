@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {onMounted, onUnmounted, ref} from "vue";
-import {APIError, BackendApiService} from "../../api/backend.js";
+import {APIError, BackendApiService} from "@/api/backend";
 import {useRouter} from "vue-router";
 
 const api = new BackendApiService()
@@ -10,6 +10,8 @@ const error = ref("");
 
 async function register(event: SubmitEvent) {
   event.preventDefault()
+
+  if (!event.target) return;
 
   const username = event.target["username"].value
   const password = event.target["password"].value
@@ -126,6 +128,13 @@ div.card {
           display: block;
           margin-top: 10px;
         }
+      }
+
+      & > .login > a {
+        color: #0077cc;
+        font-weight: bold;
+        text-decoration: none;
+        cursor: pointer;
       }
 
       padding: 20px;

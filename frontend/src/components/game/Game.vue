@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import GamePageHeader from "./ui/GamePageHeader.vue";
-import {useHeaderStore} from "../../store/header";
+import {useHeaderStore} from "@/store/header";
 import {onMounted, onUnmounted, ref, shallowRef} from "vue";
 import {useRoute} from "vue-router";
-import {GameModel} from "../../types/common";
+import type {GameModel} from "@/types/common.d";
 import ExternalLinkItem from "./ui/ExternalLinkItem.vue";
-import SmallGameCard from "../common/SmallGameCard.vue";
+import SmallGameCard from "@/components/common/SmallGameCard.vue";
 import StaffCard from "./ui/StaffCard.vue";
 import AchievementItem from "./ui/AchievementItem.vue";
-import {BackendApiService} from "../../api/backend";
+import {BackendApiService} from "@/api/backend";
 
 const gamePageHeader = shallowRef(GamePageHeader)
 const route = useRoute()

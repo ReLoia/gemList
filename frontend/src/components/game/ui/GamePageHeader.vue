@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import {mdiPlusCircle, mdiHeartCircle} from '@mdi/js';
-import {BackendApiService} from "../../../api/backend";
-import {useUserStore} from '../../../store/user';
+import {BackendApiService} from "@/api/backend";
+import {useUserStore} from '@/store/user';
 import {useRouter} from "vue-router";
 
 const router = useRouter()
@@ -71,6 +71,11 @@ function addGame(id: string) {
   @media (max-width: 800px) {
     width: 98%;
     padding-inline: 10px;
+  }
+
+  @media (max-width: 500px) {
+    padding-top: 40px;
+    flex-direction: column;
   }
 
   & > div.info {

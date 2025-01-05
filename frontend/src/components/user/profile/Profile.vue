@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import ProfilePageHeader from "./ProfilePageHeader.vue";
 import {onMounted, onUnmounted, shallowRef} from "vue";
-import {useHeaderStore} from "../../../store/header";
-import {useUserStore} from "../../../store/user";
+import {useHeaderStore} from "@/store/header";
+import {useUserStore} from "@/store/user";
 import Carousel from "./ui/Carousel.vue";
 
 const profilePageHeader = shallowRef(ProfilePageHeader)

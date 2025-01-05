@@ -1,4 +1,4 @@
-export export interface GameModel {
+export type GameModel = {
     id: string
     title: string
     description: string

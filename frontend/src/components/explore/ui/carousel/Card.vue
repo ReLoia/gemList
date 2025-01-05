@@ -2,7 +2,7 @@
 
 import {ref} from "vue";
 import {mdiHeart, mdiStar} from "@mdi/js";
-import {GameModel} from "../../../../types/common";
+import type {GameModel} from "@/types/common.d";
 
 const props = defineProps<{
   game: GameModel

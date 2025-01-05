@@ -2,7 +2,7 @@
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
 import Card from "./Card.vue";
 import {onMounted, ref} from "vue";
-import {BackendApiService} from "../../../../api/backend";
+import {BackendApiService} from "@/api/backend";
 
 const props = defineProps<{
   sort: string,

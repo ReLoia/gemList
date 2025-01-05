@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {BackendApiService} from "../../../api/backend";
+import {BackendApiService} from "@/api/backend";
 
 defineProps<{
   username: string,
@@ -36,6 +36,10 @@ api.setToken(localStorage.getItem('access_token') || '');
   flex-direction: row;
   justify-content: space-between;
   flex: 1;
+
+  @media (max-width: 800px) {
+    width: 90%;
+  }
 
   & > div.info {
     display: flex;

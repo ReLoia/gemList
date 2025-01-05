@@ -1,6 +1,6 @@
 <script setup>
-import {useUserStore} from "../../store/user.js";
-import {useHeaderStore} from "../../store/header.js";
+import {useUserStore} from "@/store/user.js";
+import {useHeaderStore} from "@/store/header.js";
 
 import LoginBanner from "./ui/LoginBanner.vue";
 import ExploreCarousel from "./ui/carousel/ExploreCarousel.vue";

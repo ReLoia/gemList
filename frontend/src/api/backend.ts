@@ -1,4 +1,4 @@
-import {AuthResponse, GameModel, UserModel} from "../types/common";
+import type {AuthResponse, GameModel, UserModel} from "../types/common";
 
 let ENV_BASE_URL: string = import.meta.env.BASE_URL;
 if (ENV_BASE_URL.endsWith("/"))

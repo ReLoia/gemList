@@ -2,9 +2,9 @@
 
 import {onMounted, ref} from "vue";
 import {mdiChevronLeft, mdiChevronRight} from "@mdi/js";
-import {GameModel} from "../../../../types/common";
-import {BackendApiService} from "../../../../api/backend";
-import Card from "../../../explore/ui/carousel/Card.vue";
+import type {GameModel} from "@/types/common.d";
+import {BackendApiService} from "@/api/backend";
+import Card from "@/components/explore/ui/carousel/Card.vue";
 
 const props = defineProps<{
   title: string,

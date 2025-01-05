@@ -48,12 +48,8 @@ const app = createApp(App)
     .use(pinia);
 
 router.beforeEach(async (to, from, next) => {
-    if (to.meta.title) {
-        document.title = to.meta.title + ' - gemList'
-    } else {
-        document.title = 'gemList'
-    }
-
+    let changed = true;
+    
     const token = localStorage.getItem('access_token')
     const userIsLogged = token !== null && token !== "";
 
@@ -66,9 +62,16 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.path === '/' && !userIsLogged) {
         next('/explore')
+        changed = false;
     } else {
         await userStore.loadUser(token)
         next()
+    }
+
+    if (changed && to.meta.title) {
+        document.title = to.meta.title + ' - gemList'
+    } else {
+        document.title = 'gemList'
     }
 });
 
