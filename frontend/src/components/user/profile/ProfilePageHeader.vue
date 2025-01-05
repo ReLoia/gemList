@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import {BackendApiService} from "@/api/backend";
+import {mdiCog} from "@mdi/js";
 
 defineProps<{
   username: string,
@@ -22,6 +23,12 @@ api.setToken(localStorage.getItem('access_token') || '');
         <p>Member since: {{ new Date(creation_date).toLocaleDateString() }}</p>
       </div>
     </div>
+    <div class="actions">
+      <router-link to="/settings">
+        <svg-icon type="mdi" :path="mdiCog"/>
+        Settings
+      </router-link>
+    </div>
   </div>
 </template>
 
@@ -36,10 +43,6 @@ api.setToken(localStorage.getItem('access_token') || '');
   flex-direction: row;
   justify-content: space-between;
   flex: 1;
-
-  @media (max-width: 800px) {
-    width: 90%;
-  }
 
   & > div.info {
     display: flex;
@@ -61,6 +64,74 @@ api.setToken(localStorage.getItem('access_token') || '');
       border-radius: 8px;
 
       position: relative;
+    }
+
+    @media (max-width: 800px) {
+      & > div {
+        & > h1 {
+          font-size: 2rem;
+        }
+
+        & > p {
+          font-size: 1.05rem;
+        }
+      }
+    }
+  }
+
+  & > div.actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: end;
+    gap: 14px;
+    padding-bottom: 20px;
+
+    & > :is(a, button) {
+      padding: 4px 20px;
+      border-radius: 10px;
+      background: #fff;
+      color: var(--primary);
+      font-weight: bold;
+      cursor: pointer;
+      transition: .4s all;
+
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 6px;
+      font-size: 1.1rem;
+
+      & > svg-icon {
+        max-height: 24px;
+        scale: .9;
+      }
+
+      &:hover {
+        filter: brightness(.7);
+      }
+    }
+  }
+
+  @media (max-width: 700px) {
+    padding-top: 40px;
+    flex-direction: column;
+  }
+
+  @media (max-width: 800px) {
+    width: 90%;
+  }
+
+  @media (max-width: 500px) {
+    padding-inline: 10px;
+    & > div.info {
+      flex-direction: column;
+      align-items: start;
+
+      & > img {
+        margin-left: 0;
+        margin-bottom: 0;
+      }
     }
   }
 }

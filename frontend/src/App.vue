@@ -220,6 +220,7 @@ header {
           width: 22px;
           height: 22px;
 
+          color: white;
           background: rgba(0, 0, 0, 0.9);
           padding: 5px;
           border-radius: 50%;
