@@ -134,6 +134,19 @@ async def get_games_from_ids(
     return [game.to_game_model().model_dump() for game in games]
 
 
+@app.get("/games/{game_id}/same-publisher", response_model=list[GameModel])
+async def get_games_same_publisher(
+        game_id: int,
+        db: Session = Depends(get_db)
+):
+    game = db.query(GameEntity).get(game_id)
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
+
+    games = game.get_all_by_same_publisher(db)
+    return [game.to_game_model().model_dump() for game in games]
+
+
 # TODO: remove
 @app.post("/games", response_model=GameModel, status_code=201)
 async def add_game(
