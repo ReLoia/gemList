@@ -85,6 +85,20 @@ function addGame(id: string) {
     padding-bottom: 20px;
     gap: 20px;
 
+    & > div {
+      & > h1 {
+        font-size: 2.2rem;
+        margin-bottom: 3px;
+      }
+
+      & > p {
+        font-size: .9em;
+        color: #EEE;
+      }
+
+      margin-bottom: 15px;
+    }
+
     & > img {
       display: block;
 
@@ -143,6 +157,7 @@ function addGame(id: string) {
       & > svg-icon {
         max-height: 24px;
         scale: .9;
+        margin-right: -.5px;
       }
 
       &.like {
