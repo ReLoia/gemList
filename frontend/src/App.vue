@@ -98,7 +98,7 @@ onMounted(calculateMainHeight)
     <router-link to="/community">Community</router-link>
     <router-link to="/friends">Friends</router-link>
   </left-menu>
-  <main ref="mainEl">
+  <main ref="mainEl" @click="menuState = !1">
     <router-view/>
   </main>
 </template>
@@ -106,7 +106,7 @@ onMounted(calculateMainHeight)
 <style scoped>
 header {
   background-color: rgba(217, 217, 217, 0.12);
-  color: #000;
+  color: #fff;
 
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
@@ -215,10 +215,10 @@ header {
           position: absolute;
           top: 100%;
           left: 100%;
-          transform: translate(-60%, -60%) scale(.62);
+          transform: translate(-60%, -60%) scale(.56);
 
-          width: 22px;
-          height: 22px;
+          width: 24px;
+          height: 23px;
 
           color: white;
           background: rgba(0, 0, 0, 0.9);

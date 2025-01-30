@@ -60,6 +60,10 @@ li.card {
     background: black;
     color: white;
     font-size: 1.5rem;
+
+    & > svg-icon {
+      height: 26px;
+    }
   }
 
   & > .card-content {

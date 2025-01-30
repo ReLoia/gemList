@@ -15,7 +15,6 @@ export type GameModel = {
     rating_esrb: string
     trailer_url: string
     likes: number
-    // len 10 array of times for each rating from 1 to 10
     ratings: number[]
 }
 

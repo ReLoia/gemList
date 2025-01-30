@@ -36,6 +36,8 @@ defineProps<{
     cursor: pointer;
     transition: .4s all;
 
+  background: #000;
+
     & > a {
       width: 100%;
       height: 100%;

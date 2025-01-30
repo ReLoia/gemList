@@ -24,6 +24,8 @@ defineProps<{
 
   transition: .4s all;
 
+  background: #fff;
+
   a {
     display: block;
     width: 100%;

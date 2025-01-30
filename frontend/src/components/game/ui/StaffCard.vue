@@ -54,6 +54,8 @@ const isHovered = ref(false)
     cursor: pointer;
     transition: .4s all;
 
+    background: #000;
+
     & > a {
       width: 100%;
       height: 100%;
@@ -94,6 +96,8 @@ const isHovered = ref(false)
   }
 
   &:hover {
+
+
     .card-preview {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
