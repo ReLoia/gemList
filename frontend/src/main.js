@@ -5,10 +5,8 @@ import {useUserStore} from "./store/user.js";
 import './style.css'
 import App from './App.vue'
 import {createRouter, createWebHistory} from 'vue-router'
-
-String.prototype.capitalize = function () {
-    return this.charAt(0).toUpperCase() + this.slice(1);
-}
+import autoResize from "@/directives/autoResize";
+import "@/utils/utils.ts";
 
 const routes = [
     {path: '/', component: () => import('./components/FutureFeature/FutureFeature.vue'), meta: {title: 'Home'}},
@@ -29,7 +27,7 @@ const routes = [
     {path: '/community', component: () => import('./components/FutureFeature/FutureFeature.vue')},
     {path: '/friends', component: () => import('./components/FutureFeature/FutureFeature.vue')},
 
-    {path: '/:pathMatch(.*)*', component: () => import('./components/404/NotFound.vue')},
+    {path: '/:pathMatch(.*)*', component: () => import('./components/404/NotFound.vue'), name: '404'},
 ].map(route => {
     if (route.name === undefined) {
         route.name = route.path.split('/')[1]
@@ -46,6 +44,8 @@ const router = createRouter({
 const pinia = createPinia()
 const app = createApp(App)
     .use(pinia);
+
+app.directive("auto-resize", autoResize)
 
 router.beforeEach(async (to, from, next) => {
     let changed = true;
