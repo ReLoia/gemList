@@ -8,7 +8,7 @@ const router = useRouter();
 const props = defineProps<{
   ratings: number[],
   game_id: string,
-  is_voted: boolean
+  userRating: number | null,
 }>()
 
 const emit = defineEmits(["update-ratings"]);
@@ -17,7 +17,6 @@ const ratingsCanvas = useTemplateRef<HTMLCanvasElement>("ratings-canvas");
 const ctx = ref();
 const hoveredIndex = ref(-1);
 const isHovered = ref(false)
-const voted = ref(props.is_voted)
 
 const api = new BackendApiService();
 if (localStorage.getItem('access_token'))
@@ -82,8 +81,8 @@ function draw(rating = props.ratings) {
     ctx.value.fillStyle = "white";
     ctx.value.fillText(i+1, x, padding * 2 + workHeight - 5);
     
-    if (hoveredIndex.value === i) 
-      ctx.value.fillText(rate.toShortString(), x, 11);
+    if (hoveredIndex.value === i)
+      ctx.value.fillText((rate - 1).toShortString(), x, 11);
     
   })
 }
@@ -112,8 +111,7 @@ async function onClick() {
     const res = await api.rateGame(props.game_id, hoveredIndex.value+1);
 
     if (res.message == "Rating updated") {
-      props.ratings[hoveredIndex.value] += 1;
-      emit("update-ratings", props.ratings);
+      emit("update-ratings", hoveredIndex.value);
       draw(props.ratings.map((r,i) => i == hoveredIndex.value ? r+1 : r));
     }
   } else {

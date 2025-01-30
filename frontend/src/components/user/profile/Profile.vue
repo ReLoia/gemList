@@ -23,9 +23,7 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-  header.setExpanded(false)
-  header.setContent(() => null)
-  header.setBackgroundImage('')
+  header.resetHeader();
 })
 
 </script>

@@ -20,11 +20,14 @@ const gameID: string = Array.isArray(route.params.id) ? route.params.id[0] : rou
 
 const game = ref<GameModel>();
 const ratings = ref([]);
+const userRating = ref<number | null>(null);
+const likes = ref<number>(0);
 
-const totalRatings = ref();
 const error = ref<string | null>(null);
 
 const api = new BackendApiService()
+if (localStorage.getItem('access_token'))
+  api.setToken(localStorage.getItem('access_token') || '');
 
 function getAverageRating(ratings) {
   let totalVotes = 0;
@@ -41,15 +44,32 @@ function getAverageRating(ratings) {
   return totalVotes > 0 ? (weightedSum / totalVotes).toFixed(2) : 0;
 }
 
+function updateRatings(rating) {
+  if (userRating.value === null) {
+    ratings.value[rating] += 1;
+  } else {
+    ratings.value[userRating.value - 1] -= 1;
+    ratings.value[rating] += 1;
+  }
+  userRating.value = rating + 1;
+}
+
 onMounted(async () => {
   header.setExpanded(true);
   header.setLoading(true);
 
   try {
     game.value = await api.getGame(gameID);
-    // totalRatings.value = game.value.ratings.reduce((acc, curr) => acc + curr, 0.000001);
     ratings.value = game.value.ratings
+    userRating.value = await api.getUserRating(gameID);
+    likes.value = game.value.likes;
 
+    header.setEmits({
+      like: async (value) => {
+        likes.value += value ? 1 : -1;
+      }
+    });
+    
     header.setContent({
       component: gamePageHeader,
       props: {
@@ -57,11 +77,12 @@ onMounted(async () => {
         title: game.value.title,
         description: game.value.description,
         image: game.value.cover_image_url,
-      }
+        userLiked: await api.getUserLiked(gameID),
+      },
     })
     header.setBackgroundImage(`url(${game.value.cover_image_url})`);
   } catch (e) {
-    if (e.message) return router.push({name: '404'});
+    if (e.message == "Game not found") return router.push({name: '404'});
     error.value = e.message;
   } finally {
     header.setLoading(false);
@@ -70,9 +91,7 @@ onMounted(async () => {
 
 
 onUnmounted(() => {
-  header.setExpanded(false)
-  header.setContent(() => null)
-  header.setBackgroundImage('')
+  header.resetHeader();
 })
 
 </script>
@@ -87,14 +106,14 @@ onUnmounted(() => {
       </section>
       <div class="meta">
         <div class="meta-info">
-          <h2 v-auto-resize>{{ game.likes.toShortString() }}</h2>
+          <h2 v-auto-resize>{{ (likes as Number).toShortString() }}</h2>
           <p>Likes</p>
         </div>
         <div class="meta-info">
           <h2 v-auto-resize>{{ getAverageRating(ratings) }}</h2>
           <p>Rating</p>
         </div>
-        <RatingGraph :ratings="ratings" :game_id="game.id" @update-ratings="r => { ratings = r }" />
+        <RatingGraph :ratings="ratings" :userRating="userRating" :game_id="game.id" @update-ratings="updateRatings"/>
       </div>
       <div class="game-info">
         <section>
@@ -139,32 +158,6 @@ onUnmounted(() => {
       </section>
 
       <divider></divider>
-
-      <!--   stats is a grid that contains "widgets" - div that are N cols of width and that have rounded corners and dark background   -->
-      <div class="stats">
-        <div class="widget ratings">
-          Ratings
-          <ul>
-            <li v-for="number in Array.from({length: 10}, (_, i) => i + 1)"
-
-                :style="{ '--percentage': `${game.ratings[number-1] / totalRatings * 100}%` }">
-              <span>{{ number }}</span> <span>{{
-                Math.round(game.ratings[number - 1] / totalRatings * 100)
-              }}%</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-    </div>
-    <div class="metadata">
-      <!--   platforms, release year, genres, publisher, developer   -->
-      <div class="meta">
-        <span class="name">Average Rating</span>
-        <span class="value">{{
-            (game.ratings.reduce((acc, curr, i) => acc + curr * (i + 1), 0.000001) / totalRatings).toFixed(2)
-          }}</span>
-      </div>
 
     </div>
   </div>

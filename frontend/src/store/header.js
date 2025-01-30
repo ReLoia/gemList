@@ -21,7 +21,8 @@ export const useHeaderStore = defineStore('header', {
                 component: () => null,
                 props: {}
             },
-            loading: false
+            loading: false,
+            emits: {}
         }
     },
 
@@ -43,7 +44,28 @@ export const useHeaderStore = defineStore('header', {
         },
         setBackgroundImage(backgroundImage) {
             this.backgroundImage = backgroundImage;
-        }
+        },
+
+        setEmits(emits) {
+            this.emits = emits;
+        },
+
+        emit(emit, ...args) {
+            if (this.emits[emit]) {
+                this.emits[emit](...args);
+            }
+        },
+
+        resetHeader() {
+            this.expanded = false;
+            this.backgroundImage = '';
+            this.content = {
+                component: () => null,
+                props: {}
+            };
+            this.loading = false;
+            this.emits = {};
+        },
     }
 
 })

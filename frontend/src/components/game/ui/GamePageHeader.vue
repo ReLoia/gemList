@@ -2,24 +2,36 @@
 import {mdiPlusCircle, mdiHeartCircle} from '@mdi/js';
 import {BackendApiService} from "@/api/backend";
 import {useUserStore} from '@/store/user';
+import {useHeaderStore} from "@/store/header";
 import {useRouter} from "vue-router";
+import {ref} from "vue";
 
 const router = useRouter()
 const user = useUserStore()
+const header = useHeaderStore()
 
-defineProps<{
+const props = defineProps<{
   id: string,
   title: string,
   description: string,
-  image: string
+  image: string,
+  userLiked: boolean
 }>()
+const uLiked = ref(props.userLiked)
 
 const api = new BackendApiService();
 if (localStorage.getItem('access_token'))
   api.setToken(localStorage.getItem('access_token') || '');
 
-function likeGame(id: string) {
-  api.likeGame(id)
+async function likeGame(id: string) {
+  const res = await api.likeGame(id)
+  if (res.message == "Game liked") {
+    uLiked.value = true
+    header.emit("like", true)
+  } else {
+    uLiked.value = false
+    header.emit("like", false)
+  }
 }
 
 function addGame(id: string) {
@@ -45,7 +57,7 @@ function addGame(id: string) {
       </div>
     </div>
     <div class="actions">
-      <button class="like" @click="likeGame(id)" v-if="user.username">
+      <button class="like" :class="{ liked: uLiked }" @click="likeGame(id)" v-if="user.username">
         <svg-icon type="mdi" :path="mdiHeartCircle"/>
       </button>
       <button class="add" @click="addGame(id)">
@@ -157,13 +169,17 @@ function addGame(id: string) {
       & > svg-icon {
         max-height: 24px;
         scale: .9;
-        margin-right: -.5px;
       }
 
       &.like {
         border-radius: 50%;
         padding: 2px;
         width: fit-content;
+
+        &.liked {
+          background: var(--primary);
+          color: #fff;
+        }
       }
 
       &:hover {
