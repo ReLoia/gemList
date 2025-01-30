@@ -24,7 +24,6 @@ games_liked = Table(
     Column("game_id", Integer, sqlalchemy.ForeignKey("games.id"), primary_key=True)
 )
 
-
 games_played = Table(
     "games_played",
     Base.metadata,
@@ -60,8 +59,8 @@ class GameEntity(Base):
         return db.query(GameEntity).filter(GameEntity.publisher == publisher).all()
 
     def get_all_by_same_publisher(self, db):
-        return db.query(GameEntity).filter(GameEntity.publisher == self.publisher).filter(GameEntity.id != self.id).all()
-
+        return db.query(GameEntity).filter(GameEntity.publisher == self.publisher).filter(
+            GameEntity.id != self.id).all()
 
     def to_game_model(self):
         return GameModel(

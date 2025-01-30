@@ -8,6 +8,10 @@ class ExternalLink(BaseModel):
     img_url: str
 
 
+class GameRating(BaseModel):
+    rating: int
+
+
 class GameModel(BaseModel):
     id: str
     title: str

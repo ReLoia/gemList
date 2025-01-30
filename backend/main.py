@@ -13,7 +13,7 @@ from backend.database.auth.auth import verify_password, get_password_hash
 from backend.database.auth.security import get_user_from_token, create_access_token
 from backend.database.models import UserEntity, GameEntity
 from backend.database.session import get_db
-from backend.models import GameModel, UserModel, NewGameModel, NewPasswordModel
+from backend.models import GameModel, UserModel, NewGameModel, NewPasswordModel, GameRating
 
 origins = [
     "http://localhost",
@@ -74,10 +74,11 @@ async def get_game(
 @app.post("/games/{game_id}/rate")
 async def rate_game(
         game_id: int,
-        rating: int,
+        value: GameRating,
         user: UserEntity = Depends(get_user_from_token),
         db: Session = Depends(get_db)
 ):
+    rating = value.rating
     if rating not in range(1, 11) or not isinstance(rating, int):
         raise HTTPException(status_code=400, detail="Rating must be an integer between 1 and 10")
 
