@@ -227,6 +227,22 @@ async def get_user(
     return user.to_user_model().model_dump()
 
 
+@app.get("/users/me/rating/{game_id}")
+async def get_user_rating(
+        game_id: int,
+        user: UserEntity = Depends(get_user_from_token)
+):
+    return user.to_user_model().games_rated.get(str(game_id))
+
+
+@app.get("/users/me/liked/{game_id}")
+async def get_user_liked(
+        game_id: int,
+        user: UserEntity = Depends(get_user_from_token)
+):
+    return user.has_liked_game(game_id)
+
+
 @app.post("/users/me/change-password")
 async def change_password(
         new_data: NewPasswordModel,

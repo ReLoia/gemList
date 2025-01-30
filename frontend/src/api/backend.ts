@@ -151,4 +151,24 @@ export class BackendApiService {
         }
         return response.json();
     }
+
+    async getUserRating(gameID: string) {
+        const response = await fetch(`${this.baseUrl}/users/me/rating/${gameID}`, {
+            headers: this.getHeaders(true),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch user rating");
+        }
+        return response.json();
+    }
+
+    async getUserLiked(gameID: string) {
+        const response = await fetch(`${this.baseUrl}/users/me/liked/${gameID}`, {
+            headers: this.getHeaders(true),
+        });
+        if (!response.ok) {
+            throw new Error("Failed to fetch user liked");
+        }
+        return response.json();
+    }
 }

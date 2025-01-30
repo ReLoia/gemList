@@ -8,6 +8,7 @@ export const useUserStore = defineStore('user', {
             username: '',
             avatar: 'https://www.freeiconspng.com/uploads/am-a-19-year-old-multimedia-artist-student-from-manila--21.png',
             creation_date: '',
+            // TODO: avoid storing these in the store and instead fetch them from the backend when needed
             games_rated: [],
             games_played: [],
             games_liked: [],
