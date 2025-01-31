@@ -23,7 +23,7 @@
   text-align: center;
 
   width: fit-content;
-  max-width: 94vw;
+  max-width: min(94vw, 1000px);
   padding: 16px 12px;
   border-radius: 12px;
   background: rgba(217, 217, 217, 0.12);
