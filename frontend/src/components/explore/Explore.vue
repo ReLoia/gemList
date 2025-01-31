@@ -4,6 +4,7 @@ import {useHeaderStore} from "@/store/header.js";
 
 import LoginBanner from "./ui/LoginBanner.vue";
 import ExploreCarousel from "./ui/carousel/ExploreCarousel.vue";
+import InfoBanner from "@/components/explore/ui/InfoBanner.vue";
 
 const user = useUserStore()
 const header = useHeaderStore()
@@ -12,6 +13,7 @@ const header = useHeaderStore()
 
 <template>
   <LoginBanner v-if="!user.username"/>
+  <InfoBanner v-else/>
 
   <ExploreCarousel sort="recent" title="Recent Games"/>
 
