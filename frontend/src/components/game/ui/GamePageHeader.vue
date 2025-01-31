@@ -35,9 +35,8 @@ async function likeGame(id: string) {
 }
 
 function addGame(id: string) {
-  // if the user is not logged in, redirect to login page
   if (!user.username) {
-    router.push({name: 'login'})
+    router.push({name: 'login?redirect=' + router.currentRoute.value.fullPath})
     return
   }
 

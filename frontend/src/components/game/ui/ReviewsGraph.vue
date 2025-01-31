@@ -82,8 +82,7 @@ function draw(rating = props.ratings) {
     ctx.value.fillText(i+1, x, padding * 2 + workHeight - 5);
     
     if (hoveredIndex.value === i)
-      ctx.value.fillText((rate - 1).toShortString(), x, 11);
-    
+      ctx.value.fillText((rate).toShortString(), x, 11);
   })
 }
 
@@ -102,7 +101,9 @@ function mousemove(ev: MouseEvent) {
   });
   
   draw(props.ratings.map((v, i) => {
-    return i === hoveredIndex.value ? v+1 : v;
+    if (i === hoveredIndex.value && hoveredIndex.value != props.userRating-1) return v+1;
+    else if (i == props.userRating-1 && i !== hoveredIndex.value) return v-1;
+    else return v;
   }))
 }
 
@@ -112,10 +113,10 @@ async function onClick() {
 
     if (res.message == "Rating updated") {
       emit("update-ratings", hoveredIndex.value);
-      draw(props.ratings.map((r,i) => i == hoveredIndex.value ? r+1 : r));
+      draw()
     }
   } else {
-    await router.push({name: 'login'})
+    await router.push('/login?redirect=' + router.currentRoute.value.fullPath)
   }
 }
 

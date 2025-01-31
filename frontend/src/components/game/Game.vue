@@ -189,7 +189,7 @@ onUnmounted(() => {
       border-radius: 12px;
       
       margin-inline: auto;
-      margin-top: 30px;
+      margin-top: 26px;
       
       & > .meta-info {
         display: flex;
@@ -201,7 +201,7 @@ onUnmounted(() => {
         width: 90px;
         position: relative;
         
-        padding-inline: 10px;
+        padding-inline: 5px;
         
         & > h2 {
           font-size: 2.4rem;
