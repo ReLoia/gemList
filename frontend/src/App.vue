@@ -1,4 +1,4 @@
-<script setup>
+<script setup lang="ts">
 
 import '@jamescoyle/svg-icon'
 import {mdiMenu, mdiClose, mdiMagnify, mdiCog} from "@mdi/js";
@@ -35,6 +35,13 @@ function calculateMainHeight(setHeaderHeight) {
     /** @type {HTMLElement} */
     const headerElement = headerEl.value
     mainElement.style.minHeight = `calc(100vh - ${headerElement.clientHeight}px)`
+  }
+}
+
+function closemenu(ev: MouseEvent) {
+  if (ev.target instanceof HTMLAnchorElement) {
+    menuState.value = false;
+    ev.target.blur()
   }
 }
 
@@ -88,7 +95,7 @@ onMounted(calculateMainHeight)
     </div>
     <component :is="headerStore.content.component" v-if="headerStore.expanded" v-bind="headerStore.content.props"/>
   </header>
-  <left-menu :class="{ expanded: menuState }">
+  <left-menu @click="closemenu" :class="{ expanded: menuState }">
     <router-link to="/">gemList</router-link>
     <router-link to="/">Home</router-link>
     <router-link to="/explore">Explore</router-link>
