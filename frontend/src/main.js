@@ -60,7 +60,7 @@ router.beforeEach(async (to, from, next) => {
         return;
     }
 
-    if (to.path === '/' && !userIsLogged) {
+    if (to.path === '/' /*&& !userIsLogged*/) { // TODO: change this to check if the user is logged in
         next('/explore')
         changed = false;
     } else {

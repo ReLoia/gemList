@@ -3,7 +3,7 @@ import { onMounted, onUnmounted } from "vue";
 export default {
     mounted(el) {        
         const resizeText = () => {
-            let parentWidth = el.parentElement.clientWidth - parseInt(window.getComputedStyle(el.parentElement).paddingInline)
+            let parentWidth = el.parentElement.clientWidth - parseInt(window.getComputedStyle(el.parentElement).paddingInline) * 2;
             let fontSize = 34;
 
             el.style.fontSize = fontSize + "px";
@@ -13,9 +13,11 @@ export default {
             }
         };
 
-        const observer = new ResizeObserver(resizeText);
-        observer.observe(el.parentElement);
-
+        const observer = new MutationObserver(resizeText);
+        observer.observe(el, { characterData: true, childList: true, subtree: true });
+        
+        resizeText()
+        
         onMounted(resizeText);
         onUnmounted(() => observer.disconnect());
 
@@ -24,6 +26,6 @@ export default {
     unmounted(el) {
         if (el.__observer__) {
             el.__observer__.disconnect();
-        }
+        }el.parentElement.clientWidth
     }
 };
