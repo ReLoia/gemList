@@ -8,7 +8,7 @@ const router = useRouter()
 
 const error = ref("");
 
-const redirect = new URLSearchParams(location.search).get('redirect')
+let redirect = new URLSearchParams(location.search).get('redirect')
 
 async function login(event: SubmitEvent) {
   event.preventDefault()
@@ -20,8 +20,11 @@ async function login(event: SubmitEvent) {
 
   try {
     const result = await api.login(username, password);
+    
     if (result.access_token) {
       localStorage.setItem('access_token', result.access_token)
+      if (redirect?.startsWith("http"))
+        redirect = "/";
       await router.push(redirect || '/')
     }
   } catch (e) {
