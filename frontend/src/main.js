@@ -9,7 +9,7 @@ import autoResize from "@/directives/autoResize";
 import "@/utils/utils.ts";
 
 const routes = [
-    {path: '/', component: () => import('./components/FutureFeature/FutureFeature.vue'), meta: {title: 'Home'}},
+    {path: '/', component: () => import('./components/home/Home.vue'), meta: {title: 'Home'}},
     {path: '/explore', component: () => import('./components/explore/Explore.vue'), meta: {title: 'Explore'}},
     {path: '/game/:id', component: () => import('./components/game/Game.vue')},
 

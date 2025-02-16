@@ -36,7 +36,7 @@ async function likeGame(id: string) {
 
 function addGame(id: string) {
   if (!user.username) {
-    router.push({name: 'login?redirect=' + router.currentRoute.value.fullPath})
+    router.push('/login?redirect=' + router.currentRoute.value.fullPath)
     return
   }
 
@@ -112,20 +112,29 @@ function addGame(id: string) {
 
     & > img {
       display: block;
-
-      width: 250px;
-      height: 160px;
-      margin-bottom: 20px;
+      
+      height: 180px;
       margin-left: -50px;
+      
+      aspect-ratio: 0.75/1;
 
       object-fit: cover;
       object-position: 10%;
-      border-radius: 8px;
+      border-radius: 5px;
 
       position: relative;
+      
+      box-sizing: border-box;
+      box-shadow: 0 17px 24px rgba(0, 0, 0, 0.9);
+      
+      transition: border-radius .4s;
 
       @media (max-width: 800px) {
         display: none;
+      }
+      
+      &:hover {
+        border-radius: 0;
       }
     }
 

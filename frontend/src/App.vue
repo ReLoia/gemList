@@ -149,7 +149,7 @@ header {
     & > .title {
       font-weight: bold;
       letter-spacing: 4px;
-      margin-right: -56px;
+      //margin-right: -56px;
     }
 
     & > div {
@@ -245,7 +245,7 @@ header {
   &.expanded {
     min-height: 340px;
 
-    --backgroundImage: url("https://api.dicebear.com/9.x/adventurer/png?backgroundColor=b6e3f4,c0aede,d1d4f9");
+    --backgroundImage: url("https:///");
     overflow: hidden;
 
     color: #fff;

@@ -162,7 +162,7 @@ export class BackendApiService {
         return response.json();
     }
 
-    async getUserLiked(gameID: string) {
+    async getUserLiked(gameID: string): Promise<boolean> {
         const response = await fetch(`${this.baseUrl}/users/me/liked/${gameID}`, {
             headers: this.getHeaders(true),
         });

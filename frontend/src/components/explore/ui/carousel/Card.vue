@@ -51,6 +51,8 @@ li.card {
   border-radius: var(--outer-radius);
   transition: .4s all;
 
+  box-shadow: 0 17px 24px rgba(0, 0, 0, 0.4);
+
   & > div {
     width: 100%;
     height: 100%;

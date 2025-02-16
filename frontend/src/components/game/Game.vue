@@ -61,7 +61,12 @@ onMounted(async () => {
   try {
     game.value = await api.getGame(gameID);
     ratings.value = game.value.ratings
-    userRating.value = await api.getUserRating(gameID);
+    let uLiked = false;
+    if (localStorage.getItem('access_token')) {
+      uLiked = await api.getUserLiked(gameID);
+      userRating.value = await api.getUserRating(gameID);
+    }
+      
     likes.value = game.value.likes;
 
     header.setEmits({
@@ -77,7 +82,7 @@ onMounted(async () => {
         title: game.value.title,
         description: game.value.description,
         image: game.value.cover_image_url,
-        userLiked: await api.getUserLiked(gameID),
+        userLiked: uLiked
       },
     })
     header.setBackgroundImage(`url(${game.value.cover_image_url})`);
@@ -142,6 +147,7 @@ onUnmounted(() => {
           </ul>
         </section>
         <section>
+<!--          TODO: reduce the line-height and set an height to align it with related games -->
           <h2>from the Same Publisher</h2>
           <ul>
             <SmallGameCard id="1" img_url="https://via.placeholder.com/150"/>
@@ -190,6 +196,8 @@ onUnmounted(() => {
       
       margin-inline: auto;
       margin-top: 26px;
+      
+      box-shadow: 0 17px 24px rgba(0, 0, 0, 0.3);
       
       & > .meta-info {
         display: flex;

@@ -24,8 +24,8 @@ export default defineConfig({
         host: true,
         proxy: {
             '/api': {
-                // target: 'https://reloia.ddns.net/gemlist/api/',
-                target: process.env.BACKEND_URL || 'http://localhost:8000/',
+                target: 'https://reloia.ddns.net/gemlist/api/',
+                // target: process.env.BACKEND_URL || 'http://localhost:8000/',
                 changeOrigin: true,
                 rewrite: path => path.replace(/^\/api/, '')
             }
